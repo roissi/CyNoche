@@ -1,0 +1,125 @@
+<%- include('partials/header.ejs') %>
+
+<h1>My movies</h1>
+
+<div class="sort">
+  <button data-sort="year_desc">Year (descending)</button>
+  <button data-sort="year_asc">Year (ascending)</button>
+  <button data-sort="rating_desc">Rating (descending)</button>
+  <button data-sort="rating_asc">Rating (ascending)</button>
+  <button data-sort="name_asc">Name (A-Z)</button>
+  <button data-sort="name_desc">Name (Z-A)</button>
+  <button data-sort="director_asc">Director (A-Z)</button>
+  <button data-sort="director_desc">Director (Z-A)</button>
+</div>
+
+<div class="all">
+  <div class="list">
+    <h2><span id="movieCount">0</span> movies</h2>
+
+    <div class="movies-container">
+      <%- include('movieList.ejs', { movies: movies }) %>
+    </div>
+  </div>
+
+<div class="form1">
+    <h2>Search a movie :</h2>
+      <input type="text" id="search-input" placeholder="Movie title" /><br /><br /><br />
+      <button id="search-button">Search</button><br /><br /><br /><br />
+
+    <h2>Add a movie :</h2>
+    <form action="" method="POST">
+      <input type="name" name="name" required />
+      <label for="name">Title</label><br /><br />
+      <input type="director" name="director" required />
+      <label for="director">Director</label><br /><br />
+      <input type="year" name="year" required />
+      <label for="year">Year</label><br /><br />
+      <input type="rating" name="rating" required />
+      <label for="rating">Rating</label><br /><br />
+      <input type="letterboxd_url" name="letterboxd_url" required />
+      <label for="letterboxd_url">++</label><br /><br /><br />
+      <button type="submit">Add</button>
+    </form>
+  </div>
+</div>
+
+<script>
+
+  // Récupérez l'élément où vous souhaitez afficher le compteur
+const counterElement = document.querySelector("#movieCount");
+  // Définissez le nombre total de films et le temps de l'animation
+const totalMovies = <%= movieCount %>;
+const animationTime = 1000;  // en millisecondes
+  // Calculez le temps entre chaque incrémentation
+const incrementTime = animationTime / totalMovies;
+  // Initialisez le compteur à 0
+let counter = 0;
+  // Définissez une fonction pour incrémenter le compteur
+function incrementCounter() {
+    counter += 1;
+    counterElement.textContent = counter;
+if (counter < totalMovies) {
+      // Si le compteur n'a pas encore atteint le total, programmez la prochaine incrément
+    setTimeout(incrementCounter, incrementTime);
+    }
+  }
+  // Commencez l'animation
+  incrementCounter();
+
+const moviesContainer = document.querySelector(".movies-container");
+const searchButton = document.querySelector("#search-button");
+const searchInput = document.querySelector("#search-input");
+
+searchButton.addEventListener("click", function (event) {
+  event.preventDefault();
+  const searchQuery = searchInput.value.trim();
+
+  fetch(`/movies/search?query=${encodeURIComponent(searchQuery)}`)
+    .then(function (response) {
+      if (response.ok) {
+        return response.text();
+      } else {
+        throw new Error(response.statusText);
+      }
+    })
+    .then((html) => {
+      if (html === 'So sorry... No movie found. Did you spell the name of the film or the name of the director correctly?') {
+        // Si la recherche ne donne aucun résultat, affichez le message
+        moviesContainer.innerHTML = '<p><i>' + html + '</i></p>';
+      } else {
+        // Sinon, affichez les résultats de la recherche
+        moviesContainer.innerHTML = html;
+      }
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
+});
+
+  const sortButtons = document.querySelectorAll(".sort button");
+
+  sortButtons.forEach(function (button) {
+    button.addEventListener("click", function (event) {
+      event.preventDefault();
+      const sort = this.getAttribute("data-sort");
+
+      fetch(`/movies/sort?sort=${sort}`)
+        .then(function (response) {
+          if (response.ok) {
+            return response.text();
+          } else {
+            throw new Error(response.statusText);
+          }
+        })
+        .then((html) => {
+          moviesContainer.innerHTML = html;
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+    });
+  });
+</script>
+
+<%- include('partials/footer.ejs') %>

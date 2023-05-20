@@ -1,0 +1,26 @@
+<ul class="movies-list">
+  <% for(const movie of movies){ %>
+  <li>
+    <img src="/img/oeil.png" class="oeil" />
+    <a href="movies/<%= movie.id %>"><%= movie.name %></a> - <%= movie.director
+    %> (<%= movie.year %>)
+    
+    <span class="rating">
+      <% if(movie.rating === 0){ %>
+        &#9734; <!-- étoile vide -->
+      <% } else if(movie.rating % 1 === 0.5){ %>
+        <% for(let i=0; i<Math.floor(movie.rating); i++){ %>
+          &#9733; <!-- étoile pleine -->
+        <% } %>
+        &#189; <!-- étoile à moitié pleine -->
+      <% } else { %>
+        <% for(let i=0; i<Math.floor(movie.rating); i++){ %>
+          &#9733; <!-- étoile pleine -->
+        <% } %>
+      <% } %>
+    </span>
+    
+    <a href="<%= movie.letterboxd_url %>" target="new"><span class="more-info">&#x2139;</span></a>
+  </li>
+  <% } %>
+</ul>

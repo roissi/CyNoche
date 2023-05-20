@@ -1,0 +1,59 @@
+<%- include('partials/header.ejs') %>
+
+<h1>My movies</h1>
+
+<div class="all">
+  <div class="list">
+    <h2>Your selected movie</h2>
+    <img src="/img/oeil.png" class="oeil2" />
+    <span class="title"><%= movie.name %></span> - <%= movie.director %> (<%=
+    movie.year %>)
+    <span class="rating">
+      <% if(movie.rating === 0){ %>
+        &#9734; <!-- étoile vide -->
+      <% } else if(movie.rating % 1 === 0.5){ %>
+        <% for(let i=0; i<Math.floor(movie.rating); i++){ %>
+          &#9733; <!-- étoile pleine -->
+        <% } %>
+        &#189; <!-- étoile à moitié pleine -->
+      <% } else { %>
+        <% for(let i=0; i<Math.floor(movie.rating); i++){ %>
+          &#9733; <!-- étoile pleine -->
+        <% } %>
+      <% } %>
+    </span>
+    <a href="<%= movie.letterboxd_url %>" target="new"><span class="more-info">&#x2139;</span></a><br /><br /><br />>
+    Back to <a href="../movies">All movies</a>
+  </div>
+  <div class="form2">
+    <h2>Update this movie :</h2>
+    <form action="/movies/update/<%= movie.id %>" method="POST">
+      <input type="hidden" name="_method" value="PATCH" />
+      <input type="hidden" name="id" value="<%= movie.id %>" />
+      <input type="name" name="name" value="<%= movie.name %>" />
+      <label for="name">Title</label><br /><br />
+      <input type="director" name="director" value="<%= movie.director %>" />
+      <label for="director">Director</label><br /><br />
+      <input type="year" name="year" value="<%= movie.year %>" />
+      <label for="year">Year</label><br /><br />
+      <input type="rating" name="rating" value="<%= movie.rating %>" />
+      <label for="rating">Rating</label><br /><br />
+      <input
+        type="letterboxd_url"
+        name="letterboxd_url"
+        value="<%= movie.letterboxd_url %>"
+      />
+      <label for="letterboxd_url">++</label><br /><br /><br />
+      <button type="submit">Update</button>
+    </form>
+
+    <h2>Delete this movie ?</h2>
+    <form action="/movies/delete/<%= movie.id %>" method="POST">
+      <input type="hidden" name="_method" value="DELETE" />
+      <input type="hidden" name="id" value="<%= movie.id %>" />
+      <button type="submit">Delete</button>
+    </form>
+  </div>
+</div>
+
+<%- include('partials/footer.ejs') %>

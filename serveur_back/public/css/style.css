@@ -1,0 +1,200 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Mulish:wght@500;900&display=swap");
+
+body {
+  background-color: black;
+}
+
+#app {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.menu_hp {
+  font-family: "Mulish", sans-serif;
+  text-align: center;
+  font-size: 1em;
+  color: white;
+}
+
+.sort {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+  width: 50%;
+  margin: 0 auto;
+}
+
+.sort button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-block: 5px;
+  margin-right: 5px;
+  width: calc(100% / 4 - 10px);
+}
+
+.sort button:nth-child(2n + 1) {
+  margin-right: 10px;
+}
+
+h1 {
+  font-family: "Mulish", sans-serif;
+  font-size: 5em;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.all {
+  font-family: "Mulish", sans-serif;
+  font-size: 1em;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+}
+
+.list {
+  font-family: "Mulish", sans-serif;
+  font-size: 1em;
+  color: white;
+  padding: 20px;
+}
+
+h2 {
+  font-family: "Mulish", sans-serif;
+  font-size: 1.5em;
+  color: white;
+  margin: 5;
+  padding: 0;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  font-family: "Mulish", sans-serif;
+  font-size: 1em;
+  color: white;
+}
+
+a:link {
+  color: goldenrod;
+  text-decoration: none;
+}
+a:visited {
+  color: goldenrod;
+}
+a:hover {
+  color: white;
+}
+a:active {
+  color: goldenrod;
+}
+
+.oeil {
+  padding-right: 20px;
+}
+
+.oeil2 {
+  padding-right: 15px;
+}
+
+.title {
+  font-family: "Mulish";
+  font-size: 1em;
+  color: goldenrod;
+}
+
+.rate {
+  display: inline-block;
+  width: 100px;
+  height: 20px;
+  position: relative;
+  overflow: hidden;
+  vertical-align: middle;
+}
+  
+.rate::before,
+.rate::after {
+  content: "\2605\00a0";
+  font-size: 16px;
+  color: #ccc;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+  
+.rating {
+  color: #e35361; /* couleur des étoiles */
+  font-size: 1.2em;
+  display: inline-block;
+  margin-right: 15px;
+  margin-left: 10px;
+}
+
+.more-info {
+  display: inline-block;
+  background-color: #0071c5;
+  color: white;
+  padding: 1px 6px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 4px;
+  box-shadow: -1px -1px 0 white;
+  text-shadow: 0px 1px 1px black;
+}
+
+.form1 {
+  font-family: "Mulish", sans-serif;
+  font-size: 1em;
+  color: white;
+  padding: 50px;
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.form2 {
+  font-family: "Mulish", sans-serif;
+  font-size: 1em;
+  color: white;
+  padding: 60px;
+}
+
+input {
+  width: 200px;
+  padding: 5px;
+  margin: 2px;
+  border-radius: 4px;
+  font-family: "Mulish";
+  font-size: 1em;
+}
+
+button {
+  background: goldenrod;
+  height: 30px;
+  width: 200px;
+  transform: translateY(-50%);
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  cursor: pointer;
+  border-radius: 4px;
+  font-family: "Mulish";
+  font-size: 1em;
+}
+
+#movieCount {
+  font-family: "Mulish", sans-serif;
+  font-size: 1.5em;
+  color: #e35361;
+}
