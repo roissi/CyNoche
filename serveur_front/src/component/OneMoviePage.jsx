@@ -14,6 +14,10 @@ const OneMoviePage = () => {
   const bgColor = useColorModeValue("#e4fff7", "gray.800");
   const color = useColorModeValue("black", "white");
   const titleColor = useColorModeValue('#319593', '#79e3d6');
+
+  const handleMovieUpdate = (updatedMovie) => {
+    setMovie(updatedMovie);
+  };
   
   useEffect(() => {
     const fetchMovie = async () => {
@@ -37,7 +41,11 @@ const OneMoviePage = () => {
       <VStack spacing={8}>
         <Flex direction="row" alignItems="center">
           <Heading color={titleColor} mr={5}>{movie.name}</Heading>
-          <EditModal ml={5} movie={movie} /> {/* Ajoutez votre bouton de modal d'édition ici */}
+          <EditModal
+            ml={5}
+            movie={movie}
+            onUpdate={handleMovieUpdate}
+          />
         </Flex>
         <Box as="span" className="rating" ml="4">
           {[...Array(5)].map((_, i) => {

@@ -2,7 +2,7 @@ import { Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, Mo
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function MyModal({ movie }) {
+function MyModal({ movie, onUpdate }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [name, setName] = useState("");
   const [director, setDirector] = useState("");
@@ -32,6 +32,7 @@ function MyModal({ movie }) {
     try {
       const response = await axios.post(`http://localhost:4500/movies/update/${movie.id}`, movieUpdate);
       console.log(response.data);
+      onUpdate(movieUpdate);
       onClose();
     } catch (error) {
       console.error(error);
