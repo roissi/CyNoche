@@ -22,10 +22,10 @@ function ModalDeleteMovie({ movie, onDelete, ...props }) {
 
   return (
     <>
-      <Button colorScheme="red" onClick={onOpen} {...props}>Delete this movie</Button>
+      <Button onClick={onOpen} {...props}>Delete this movie</Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
+        <ModalOverlay backdropFilter='blur(2px)' />
         <ModalContent>
           <ModalHeader>Delete this movie</ModalHeader>
           <ModalCloseButton />
@@ -34,10 +34,10 @@ function ModalDeleteMovie({ movie, onDelete, ...props }) {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
+            <Button colorScheme="teal" mr={3} onClick={onClose}>
               Close
             </Button>
-            <Button variant="ghost" colorScheme="red" onClick={handleDelete}>Delete</Button>
+            <Button variant="ghost" onClick={handleDelete}>Delete</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

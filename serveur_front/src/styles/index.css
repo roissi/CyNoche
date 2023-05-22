@@ -1,5 +1,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Mulish:wght@500;900&display=swap");
 
+@font-face {
+  font-family: 'Shining-NFI-Demo';
+  src: url('../assets/fonts/Shining-NFI-Demo.ttf.eot'); /* IE9 Compat Modes */
+  src: url('../assets/fonts/Shining-NFI-Demo.ttf.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+      url('../assets/fonts/Shining-NFI-Demo.ttf.woff') format('woff'), /* Super Modern Browsers */
+      url('../assets/fonts/Shining-NFI-Demo.ttf.ttf') format('ttf'), /* Safari, Android, iOS */
+      url('../assets/fonts/Shining-NFI-Demo.ttf.svg') format('svg'); /* Legacy iOS */
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
