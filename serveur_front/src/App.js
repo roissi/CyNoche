@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Heading, Flex,Link as ChakraLink, VStack } from '@chakra-ui/react';
+import { Box, Heading, Text, Flex, Link as ChakraLink, VStack } from '@chakra-ui/react';
 import { ChakraProvider, useColorModeValue } from "@chakra-ui/react"
 import theme from "./theme"
 import { BrowserRouter as Router, Route, Link as RouterLink, Routes } from 'react-router-dom';
@@ -12,6 +12,7 @@ const Home = () => {
   const color = useColorModeValue("white", "black");
   const titleColor = useColorModeValue('black', 'white');
   const linkColor = useColorModeValue('#319593', '#79e3d6');
+  const linkColor2 = useColorModeValue('goldenrod', 'goldenrod');
   const hoverColor = useColorModeValue('gray.800', 'white');
 
   return (
@@ -20,11 +21,11 @@ const Home = () => {
         <ColorModeToggle />
       </Flex>
       <VStack spacing={8}>
-        <Heading as="h1" fontSize="5em" fontFamily="'Mulish', sans-serif" color={titleColor}>CyNoche</Heading>
-        <VStack spacing={4}>
-          <ChakraLink as={RouterLink} to="/movies" color={linkColor} _hover={{ color: hoverColor }}>Click here to see all movies</ChakraLink>
-          <ChakraLink as={RouterLink} to="/directors" color={linkColor} _hover={{ color: hoverColor }}>Click here to see all directors</ChakraLink>
-          <ChakraLink as={RouterLink} to="/ratings" color={linkColor} _hover={{ color: hoverColor }}>Click here to see all ratings</ChakraLink>
+        <Heading as="h1" fontSize="10em" fontFamily="'Shining-NFI-Demo', sans-serif" textShadow="4px 4px teal" color={titleColor}>Cy<Text as="span" fontSize="0.8em">Screen</Text></Heading>
+        <VStack spacing={3}>
+          <ChakraLink as={RouterLink} to="/movies" fontSize="1.5em" color={linkColor} _hover={{ color: hoverColor }}>Click here to see all movies</ChakraLink>
+          <ChakraLink as={RouterLink} isExternal to="https://github.com/roissi/CyNoche" fontSize="1.5em" color={linkColor2} _hover={{ color: hoverColor }}>Click here to see the GitHub repository</ChakraLink>
+          <ChakraLink as={RouterLink} isExternal to="https://github.com/roissi/CyNoche/blob/master/README.md" fontSize="1.5em" color={linkColor2} _hover={{ color: hoverColor }}>Click here to README.md</ChakraLink>
         </VStack>
       </VStack>
     </Flex>

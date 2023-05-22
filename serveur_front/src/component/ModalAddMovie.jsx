@@ -70,7 +70,7 @@ function MyModal() {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
+            <Button colorScheme="teal" mr={3} onClick={onClose}>
               Close
             </Button>
             <Button variant="ghost" onClick={handleSubmit}>Save</Button>

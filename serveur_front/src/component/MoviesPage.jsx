@@ -131,7 +131,7 @@ const MoviesPage = () => {
         <ColorModeToggle />
       </Flex>
       <VStack spacing={3} w="100%" alignItems="center">
-        <Heading as="h1" fontSize="6xl" mt={10} mb={10}>My movies</Heading>
+        <Heading as="h1" fontSize="5em" fontFamily="'Shining-NFI-Demo'" textShadow="3px 3px teal" mt={10} mb={10}>Cy<Text as="span" fontSize="0.8em">Screen</Text></Heading>
         <Box display="flex" flexDirection="column" alignItems="center">
           <Stack mb={4} spacing={4} direction='row' align='center'>
             <Button colorScheme='teal' size='md' onClick={sortMoviesByNameAsc}>Name (A-Z)</Button>
