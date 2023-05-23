@@ -3,7 +3,8 @@ import { Box, Heading, Flex, Image, Link as ChakraLink, VStack } from '@chakra-u
 import { ChakraProvider, useColorModeValue } from "@chakra-ui/react"
 import theme from "./theme"
 import { BrowserRouter as Router, Route, Link as RouterLink, Routes } from 'react-router-dom';
-import logo from './assets/img/CyNoche-transparent.png';
+import darkLogo from './assets/img/CyNoche-transparent.png';
+import lightLogo from './assets/img/CyNoche-transparent_light.png';
 import MoviesPage from './component/MoviesPage';
 import OneMoviePage from './component/OneMoviePage';
 import ColorModeToggle from './component/ColorModeToggle';
@@ -14,6 +15,7 @@ const Home = () => {
   const linkColor = useColorModeValue('#319593', '#79e3d6');
   const linkColor2 = useColorModeValue('goldenrod', 'goldenrod');
   const hoverColor = useColorModeValue('gray.800', 'white');
+  const logo = useColorModeValue(lightLogo, darkLogo);
 
   return (
     <Flex direction="column" bgColor={bgColor} color={color} w="100%" minH="100vh" justifyContent="center" alignItems="center">

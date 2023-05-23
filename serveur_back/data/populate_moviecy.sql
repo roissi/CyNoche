@@ -1853,7 +1853,7 @@ INSERT INTO "movies" (date, name, director, year, letterboxd_url, rating) VALUES
 (now(),'Nos frangins','Rachid Bouchareb','2022','https://boxd.it/AlyE','2'),
 (now(),'Murina','Antoneta Alamat Kusijanović','2021','https://boxd.it/vBV0','4'),
 (now(),'The quiet girl','Colm Bairéad','2022','https://boxd.it/yvgm','2.5'),
-(now(),'Sur l''Adamant','Nicolas Philibert','2023','https://boxd.it/Evmm','4'),
+(now(),'Sur l''Adamant','Nicolas Philibert','2023','https://boxd.it/Evmm','3.5'),
 (now(),'Blue jean','Georgia Oakley','2022','https://boxd.it/AHhg','3.5'),
 (now(),'Mad god','Phil Tippett','2021','https://boxd.it/vVPm','4'),
 (now(),'Retour à Séoul','Davy Chou','2022','https://boxd.it/zXDg','3.5'),
@@ -1882,6 +1882,10 @@ INSERT INTO "movies" (date, name, director, year, letterboxd_url, rating) VALUES
 (now(),'Sublime','Mariano Biasin','2022','https://boxd.it/vn76','2.5'),
 (now(),'Misanthrope','Damián Szifrón','2023','https://boxd.it/mmKe','4'),
 (now(),'Sisu : de l''or et du sang','Jalmari Helander','2022','https://boxd.it/vHpu','3'),
-(now(),'Pour la france','Rachid Hami','2022','https://boxd.it/Aaje','2.5');
+(now(),'Pour la france','Rachid Hami','2022','https://boxd.it/Aaje','2.5'),
+(now(),'Super Mario Bros. le film','Aaron Horvath, Michael Jelenic','2023','https://boxd.it/i8C8','2.5'),
+(now(),'Crime à froid','Bo Arne Vibenius','1973','https://boxd.it/1MZs','4'),
+(now(),'Isolation','Billy O''Brien','2005','https://boxd.it/1uKa','3'),
+(now(),'John Wick : chapitre 4','Chad Stahelski','2023','https://boxd.it/mh48','3');
 
 COMMIT;

@@ -3,7 +3,8 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Box, Button, Flex, Stack, VStack, Heading, Image, Input, Text, List, ListItem, Link as ChakraLink } from '@chakra-ui/react';
 import axios from 'axios';
 import letterboxdLogo from '../assets/img/letterboxd-decal-dots-neg-rgb-500px.png';
-import logo from '../assets/img/CyNoche-transparent.png';
+import darkLogo from '../assets/img/CyNoche-transparent.png';
+import lightLogo from '../assets/img/CyNoche-transparent_light.png';
 import ColorModeToggle from './ColorModeToggle';
 import { useColorModeValue } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -24,6 +25,7 @@ const MoviesPage = () => {
   const [searchPerformed, setSearchPerformed] = useState(false);
   const [moviesBeforeSearch, setMoviesBeforeSearch] = useState([]);
   const [pageBeforeSearch, setPageBeforeSearch] = useState(1);
+  const logo = useColorModeValue(lightLogo, darkLogo);
   
   // Créer la fonction fetchMovies
   const fetchMovies = (endpoint) => {
