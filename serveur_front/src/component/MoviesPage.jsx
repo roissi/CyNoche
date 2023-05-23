@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Box, Button, Flex, Stack, VStack, Heading, Image, Input, Text, List, ListItem, Link as ChakraLink } from '@chakra-ui/react';
 import axios from 'axios';
-import letterboxdLogo from '../assets/letterboxd-decal-dots-neg-rgb-500px.png';
+import letterboxdLogo from '../assets/img/letterboxd-decal-dots-neg-rgb-500px.png';
+import logo from '../assets/img/CyNoche-transparent.png';
 import ColorModeToggle from './ColorModeToggle';
 import { useColorModeValue } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -131,7 +132,9 @@ const MoviesPage = () => {
         <ColorModeToggle />
       </Flex>
       <VStack spacing={3} w="100%" alignItems="center">
-        <Heading as="h1" fontSize="5em" fontFamily="'Shining-NFI-Demo'" textShadow="3px 3px teal" mt={10} mb={10}>Cy<Text as="span" fontSize="0.8em">Screen</Text></Heading>
+        <Heading>
+          <Image src={logo} alt="CyNoche Logo" width="600px" height="300px"  objectFit="contain" />
+        </Heading>
         <Box display="flex" flexDirection="column" alignItems="center">
           <Stack mb={4} spacing={4} direction='row' align='center'>
             <Button colorScheme='teal' size='md' onClick={sortMoviesByNameAsc}>Name (A-Z)</Button>

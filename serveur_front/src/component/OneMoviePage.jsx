@@ -5,7 +5,7 @@ import axios from 'axios';
 import ColorModeToggle from './ColorModeToggle';
 import { useColorModeValue } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import letterboxdLogo from '../assets/letterboxd-decal-dots-neg-rgb-500px.png';
+import letterboxdLogo from '../assets/img/letterboxd-decal-dots-neg-rgb-500px.png';
 import EditModal from './ModalEditMovie';
 import DeleteMovie from './ModalDeleteMovie';
 import { useNavigate } from 'react-router-dom';

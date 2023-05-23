@@ -1,8 +1,9 @@
 import React from 'react';
-import { Box, Heading, Text, Flex, Link as ChakraLink, VStack } from '@chakra-ui/react';
+import { Box, Heading, Flex, Image, Link as ChakraLink, VStack } from '@chakra-ui/react';
 import { ChakraProvider, useColorModeValue } from "@chakra-ui/react"
 import theme from "./theme"
 import { BrowserRouter as Router, Route, Link as RouterLink, Routes } from 'react-router-dom';
+import logo from './assets/img/CyNoche-transparent.png';
 import MoviesPage from './component/MoviesPage';
 import OneMoviePage from './component/OneMoviePage';
 import ColorModeToggle from './component/ColorModeToggle';
@@ -10,7 +11,6 @@ import ColorModeToggle from './component/ColorModeToggle';
 const Home = () => {
   const bgColor = useColorModeValue("#e4fff7", "gray.800");
   const color = useColorModeValue("white", "black");
-  const titleColor = useColorModeValue('black', 'white');
   const linkColor = useColorModeValue('#319593', '#79e3d6');
   const linkColor2 = useColorModeValue('goldenrod', 'goldenrod');
   const hoverColor = useColorModeValue('gray.800', 'white');
@@ -21,7 +21,9 @@ const Home = () => {
         <ColorModeToggle />
       </Flex>
       <VStack spacing={8}>
-        <Heading as="h1" fontSize="10em" fontFamily="'Shining-NFI-Demo', sans-serif" textShadow="4px 4px teal" color={titleColor}>Cy<Text as="span" fontSize="0.8em">Screen</Text></Heading>
+        <Heading>
+          <Image src={logo} alt="CyNoche Logo" width="1200px" height="300px"  objectFit="contain" />
+        </Heading>
         <VStack spacing={3}>
           <ChakraLink as={RouterLink} to="/movies" fontSize="1.5em" color={linkColor} _hover={{ color: hoverColor }}>Click here to see all movies</ChakraLink>
           <ChakraLink as={RouterLink} isExternal to="https://github.com/roissi/CyNoche" fontSize="1.5em" color={linkColor2} _hover={{ color: hoverColor }}>Click here to see the GitHub repository</ChakraLink>
