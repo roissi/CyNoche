@@ -1,4 +1,5 @@
 const dataMapper = require("../model/dataMapper");
+const axios = require('axios');
 
 const movieController = {
   // Route pour récupérer tous les films
@@ -79,16 +80,22 @@ const movieController = {
   async createMovie(req, res, next) {
     const { name, director, year, rating, letterboxd_url } = req.body;
     const date = new Date();
-    const movieAdd = {
-      date,
-      name,
-      director,
-      year,
-      rating,
-      letterboxd_url,
-    };
-
+  
     try {
+      // Fetch TMDB ID for the movie
+      const tmdbResponse = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=1&include_adult=false&query=${name}`);
+      const tmdb_id = tmdbResponse.data.results[0]?.id; // Utilisation de la chaîne d'accès optionnelle pour éviter une erreur si aucun résultat n'est trouvé
+  
+      const movieAdd = {
+        date,
+        name,
+        director,
+        year,
+        rating,
+        letterboxd_url,
+        tmdb_id, // Ajouter l'ID TMDB à vos données de film
+      };
+  
       const movie = await dataMapper.createMovie(movieAdd);
       if (!movie) {
         res.status(404).json({ message: "Impossible de créer le film" });
@@ -104,9 +111,22 @@ const movieController = {
   // Route pour mettre à jour un film existant
   async updateMovie(req, res, next) {
     const movieId = req.params.id;
-    const movieData = req.body;
-
+    const { name, director, year, rating, letterboxd_url } = req.body;
+  
     try {
+      // Fetch TMDB ID for the movie
+      const tmdbResponse = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=1&include_adult=false&query=${name}`);
+      const tmdb_id = tmdbResponse.data.results[0]?.id; // Utilisation de la chaîne d'accès optionnelle pour éviter une erreur si aucun résultat n'est trouvé
+  
+      const movieData = {
+        name,
+        director,
+        year,
+        rating,
+        letterboxd_url,
+        tmdb_id, // Mettre à jour l'ID TMDB dans vos données de film
+      };
+  
       const movie = await dataMapper.updateMovie(movieId, movieData);
       if (!movie) {
         res.status(404).json({ message: "Film introuvable" });
