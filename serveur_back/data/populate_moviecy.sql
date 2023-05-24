@@ -15,7 +15,8 @@ CREATE TABLE "movies" (
   "director" TEXT NOT NULL,
   "year" INTEGER NOT NULL,
   "letterboxd_url" TEXT NOT NULL,
-  "rating" DECIMAL NOT NULL
+  "rating" DECIMAL NOT NULL,
+  "tmdb_id" INTEGER
 );
 
 -- Seeding
@@ -1694,7 +1695,7 @@ INSERT INTO "movies" (date, name, director, year, letterboxd_url, rating) VALUES
 (now(),'Ne dis rien','Christian Tafdrup','2022','https://boxd.it/vqlg','3'),
 (now(),'L''été nucléaire','Gaël Lépingle','2022','https://boxd.it/qSrw','2'),
 (now(),'Idiocracy','Mike Judge','2006','https://boxd.it/20RW','2'),
-(now(),'Les enfants des autres''s Children','Rebecca Zlotowski','2022','https://boxd.it/ufP8','3.5'),
+(now(),'Les enfants des autres','Rebecca Zlotowski','2022','https://boxd.it/ufP8','3.5'),
 (now(),'Jumper','Doug Liman','2008','https://boxd.it/20ss','2.5'),
 (now(),'Athena','Romain Gavras','2022','https://boxd.it/waii','0'),
 (now(),'Aftersun','Charlotte Wells','2022','https://boxd.it/Arw0','4.5'),
@@ -1887,5 +1888,6 @@ INSERT INTO "movies" (date, name, director, year, letterboxd_url, rating) VALUES
 (now(),'Crime à froid','Bo Arne Vibenius','1973','https://boxd.it/1MZs','4'),
 (now(),'Isolation','Billy O''Brien','2005','https://boxd.it/1uKa','3'),
 (now(),'John Wick : chapitre 4','Chad Stahelski','2023','https://boxd.it/mh48','3');
+(now(),'Quatre étoiles','Christian Vincent','2006','https://boxd.it/1Pw4','2');
 
 COMMIT;

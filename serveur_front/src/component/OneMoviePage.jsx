@@ -16,6 +16,7 @@ const OneMoviePage = () => {
   const bgColor = useColorModeValue("#e4fff7", "gray.800");
   const color = useColorModeValue("black", "white");
   const titleColor = useColorModeValue('#319593', '#79e3d6');
+  const [movieDetails, setMovieDetails] = useState(null);
 
   const handleMovieUpdate = (updatedMovie) => {
     setMovie(updatedMovie);
@@ -28,13 +29,24 @@ const OneMoviePage = () => {
   
   useEffect(() => {
     const fetchMovie = async () => {
-      const response = await axios.get(`http://localhost:4500/movies/${id}`);
-      console.log(response.data); // Affichez la réponse de l'API
-      setMovie(response.data.movie);
+      try {
+        const response = await axios.get(`http://localhost:4500/movies/${id}`);
+        setMovie(response.data.movie);
+        
+        const tmdbResponse = await axios.get(`https://api.themoviedb.org/3/movie/${response.data.movie.tmdb_id}?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=fr-FR`);
+        const movieData = tmdbResponse.data;
+        const posterUrl = movieData.poster_path ? `https://image.tmdb.org/t/p/original${movieData.poster_path}` : null;
+        movieData.posterUrl = posterUrl;
+
+        console.log('TMDB movie details:', movieData);
+        setMovieDetails(movieData);
+      } catch (error) {
+        console.error('Error fetching movie details:', error);
+      }
     };
     
     fetchMovie();
-  }, [id]); // utilisez id ici au lieu de match.params.id
+  }, [id]);
   
   if (!movie) {
     return <Text>Loading...</Text>;
@@ -68,8 +80,17 @@ const OneMoviePage = () => {
             <Image src={letterboxdLogo} alt="Letterboxd Info" boxSize="24px" />
           </ChakraLink>
         </Flex>
+        {movieDetails && movieDetails.posterUrl && 
+          <Box my="4">
+            <Image
+              src={movieDetails.posterUrl}
+              alt="Movie Poster"
+              width="250px"
+            />
+          </Box>
+        }
         <Box maxWidth="80ch" margin="auto">
-          <Text fontSize="lg" fontStyle="italic">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</Text>
+          <Text fontSize="lg" fontStyle="italic">{movieDetails ? movieDetails.overview : 'No overview available'}</Text>
         </Box>
         <Box textAlign="center">
           <EditModal

@@ -103,8 +103,8 @@ const dataMapper = {
     try {
       const result = await client.query(
         `
-              INSERT INTO movies (date, name, director, year, rating, letterboxd_url) 
-              VALUES ($1, $2, $3, $4, $5, $6)
+              INSERT INTO movies (date, name, director, year, rating, letterboxd_url, tmdb_id) 
+              VALUES ($1, $2, $3, $4, $5, $6, $7)
               RETURNING *
               `,
         [
@@ -114,6 +114,7 @@ const dataMapper = {
           newMovie.year,
           newMovie.rating,
           newMovie.letterboxd_url,
+          newMovie.tmdb_id
         ]
       );
       return result.rows[0];
@@ -123,30 +124,42 @@ const dataMapper = {
     }
   },
 
-  // Mettre à jour un film existant
-  async updateMovie(movieId, movieData) {
+    // Mettre à jour un film existant
+    async updateMovie(movieId, movieData) {
+      const columns = ['name', 'director', 'year', 'letterboxd_url', 'rating', 'tmdb_id'];
+      const values = [movieData.name, movieData.director, movieData.year, movieData.letterboxd_url, movieData.rating, movieData.tmdb_id];
+  
+      // Supprimer les colonnes qui n'ont pas de valeur correspondante dans movieData
+      for (let i = 0; i < columns.length; i++) {
+        if (values[i] === null || values[i] === undefined) {
+          columns.splice(i, 1);
+          values.splice(i, 1);
+          i--;
+        }
+      }
+  
+      values.push(movieId); // Ajouter movieId à la fin du tableau de valeurs
+  
+      const query = `
+        UPDATE movies
+        SET ${columns.map((column, i) => `${column} = $${i+1}`).join(', ')}
+        WHERE id = $${values.length}
+        RETURNING *;
+      `;
+  
+      try {
+        const result = await client.query(query, values);
+        return result.rows[0];
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    },
+  
+  // Ferme la connexion à la base de données
+  async closeConnection() {
     try {
-      const result = await client.query(
-        `
-      UPDATE movies
-      SET name = $1,
-      director = $2,
-      year = $3,
-      letterboxd_url = $4,
-      rating = $5
-      WHERE id = $6
-      RETURNING *;
-    `,
-        [
-          movieData.name,
-          movieData.director,
-          movieData.year,
-          movieData.letterboxd_url,
-          movieData.rating,
-          movieId,
-        ]
-      );
-      return result.rows[0];
+      await client.end();
     } catch (error) {
       console.error(error);
       throw error;
