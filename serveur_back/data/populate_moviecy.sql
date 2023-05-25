@@ -453,7 +453,7 @@ INSERT INTO "movies" (date, name, director, year, letterboxd_url, rating) VALUES
 (now(),'Knives and skin','Jennifer Reeder','2019','https://boxd.it/l8O0','4'),
 (now(),'Seules les bêtes','Dominik Moll','2019','https://boxd.it/l63m','4'),
 (now(),'Les Misérables','Ladj Ly','2019','https://boxd.it/lAPA','4'),
-(now(),'Traîné sur le bitumee','S. Craig Zahler','2018','https://boxd.it/fAly','4'),
+(now(),'Traîné sur le bitume','S. Craig Zahler','2018','https://boxd.it/fAly','4'),
 (now(),'Le bel été','Pierre Creton','2019','https://boxd.it/ncBe','4'),
 (now(),'Braquer Poitiers','Claude Schmitz','2018','https://boxd.it/jB3S','4'),
 (now(),'The irishman','Martin Scorsese','2019','https://boxd.it/dYOq','4'),
@@ -1887,7 +1887,7 @@ INSERT INTO "movies" (date, name, director, year, letterboxd_url, rating) VALUES
 (now(),'Super Mario Bros. le film','Aaron Horvath, Michael Jelenic','2023','https://boxd.it/i8C8','2.5'),
 (now(),'Crime à froid','Bo Arne Vibenius','1973','https://boxd.it/1MZs','4'),
 (now(),'Isolation','Billy O''Brien','2005','https://boxd.it/1uKa','3'),
-(now(),'John Wick : chapitre 4','Chad Stahelski','2023','https://boxd.it/mh48','3');
+(now(),'John Wick : chapitre 4','Chad Stahelski','2023','https://boxd.it/mh48','2.5');
 (now(),'Quatre étoiles','Christian Vincent','2006','https://boxd.it/1Pw4','2');
 
 COMMIT;
