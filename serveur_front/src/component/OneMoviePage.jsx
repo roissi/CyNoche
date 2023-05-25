@@ -59,7 +59,7 @@ const OneMoviePage = () => {
       </Flex>
       <VStack spacing={8}>
         <Flex direction="row" alignItems="center">
-          <Heading color={titleColor} mr={5}>{movie.name}</Heading>
+          <Heading size="2xl" color={titleColor} mr={5}>{movie.name}</Heading>
         </Flex>
         <Box as="span" className="rating" ml="4">
           {[...Array(5)].map((_, i) => {
@@ -75,7 +75,7 @@ const OneMoviePage = () => {
           })}
         </Box>
         <Flex align="center">
-          <Text>{movie.director} / {movie.year}</Text>
+          <Text fontSize="2xl">{movie.director} / {movie.year}</Text>
           <ChakraLink href={movie.letterboxd_url} isExternal ml="2">
             <Image src={letterboxdLogo} alt="Letterboxd Info" boxSize="24px" />
           </ChakraLink>
