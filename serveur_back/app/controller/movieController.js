@@ -77,67 +77,79 @@ const movieController = {
   },
 
   // Route pour créer un nouveau film
-  async createMovie(req, res, next) {
-    const { name, director, year, rating, letterboxd_url } = req.body;
-    const date = new Date();
-  
-    try {
-      // Fetch TMDB ID for the movie
-      const tmdbResponse = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=1&include_adult=false&query=${name}`);
-      const tmdb_id = tmdbResponse.data.results[0]?.id; // Utilisation de la chaîne d'accès optionnelle pour éviter une erreur si aucun résultat n'est trouvé
-  
-      const movieAdd = {
-        date,
-        name,
-        director,
-        year,
-        rating,
-        letterboxd_url,
-        tmdb_id, // Ajouter l'ID TMDB à vos données de film
-      };
-  
-      const movie = await dataMapper.createMovie(movieAdd);
-      if (!movie) {
-        res.status(404).json({ message: "Impossible de créer le film" });
-        return;
-      }
-      res.json({ message: 'Film créé avec succès', movie });
-    } catch (error) {
-      // Passer l'erreur au middleware de gestion des erreurs
-      next(error);
+async createMovie(req, res, next) {
+  const { name, director, year, rating, letterboxd_url } = req.body;
+  const date = new Date();
+
+  try {
+    // Fetch TMDB ID for the movie
+    const tmdbResponseEn = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=1&include_adult=false&query=${name}`);
+    const tmdbResponseFr = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.TMDB_API_KEY}&language=fr-FR&page=1&include_adult=false&query=${name}`);
+
+    const tmdb_id = tmdbResponseEn.data.results[0]?.id; // Utilisation de la chaîne d'accès optionnelle pour éviter une erreur si aucun résultat n'est trouvé
+    const overview_en = tmdbResponseEn.data.results[0]?.overview;
+    const overview_fr = tmdbResponseFr.data.results[0]?.overview;
+
+    const movieAdd = {
+      date,
+      name,
+      director,
+      year,
+      rating,
+      letterboxd_url,
+      tmdb_id, // Ajouter l'ID TMDB à vos données de film
+      overview_en,
+      overview_fr
+    };
+
+    const movie = await dataMapper.createMovie(movieAdd);
+    if (!movie) {
+      res.status(404).json({ message: "Impossible de créer le film" });
+      return;
     }
-  },
+    res.json({ message: 'Film créé avec succès', movie });
+  } catch (error) {
+    // Passer l'erreur au middleware de gestion des erreurs
+    next(error);
+  }
+},
 
   // Route pour mettre à jour un film existant
-  async updateMovie(req, res, next) {
-    const movieId = req.params.id;
-    const { name, director, year, rating, letterboxd_url } = req.body;
-  
-    try {
-      // Fetch TMDB ID for the movie
-      const tmdbResponse = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=1&include_adult=false&query=${name}`);
-      const tmdb_id = tmdbResponse.data.results[0]?.id; // Utilisation de la chaîne d'accès optionnelle pour éviter une erreur si aucun résultat n'est trouvé
-  
-      const movieData = {
-        name,
-        director,
-        year,
-        rating,
-        letterboxd_url,
-        tmdb_id, // Mettre à jour l'ID TMDB dans vos données de film
-      };
-  
-      const movie = await dataMapper.updateMovie(movieId, movieData);
-      if (!movie) {
-        res.status(404).json({ message: "Film introuvable" });
-        return;
-      }
-      res.json({ message: 'Film mis à jour avec succès', movie });
-    } catch (error) {
-      // Passer l'erreur au middleware de gestion des erreurs
-      next(error);
+async updateMovie(req, res, next) {
+  const movieId = req.params.id;
+  const { name, director, year, rating, letterboxd_url } = req.body;
+
+  try {
+    // Fetch TMDB ID for the movie
+    const tmdbResponseEn = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=1&include_adult=false&query=${name}`);
+    const tmdbResponseFr = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.TMDB_API_KEY}&language=fr-FR&page=1&include_adult=false&query=${name}`);
+
+    const tmdb_id = tmdbResponseEn.data.results[0]?.id; // Utilisation de la chaîne d'accès optionnelle pour éviter une erreur si aucun résultat n'est trouvé
+    const overview_en = tmdbResponseEn.data.results[0]?.overview;
+    const overview_fr = tmdbResponseFr.data.results[0]?.overview;
+
+    const movieData = {
+      name,
+      director,
+      year,
+      rating,
+      letterboxd_url,
+      tmdb_id, // Mettre à jour l'ID TMDB dans vos données de film
+      overview_en,
+      overview_fr
+    };
+
+    const movie = await dataMapper.updateMovie(movieId, movieData);
+    if (!movie) {
+      res.status(404).json({ message: "Film introuvable" });
+      return;
     }
-  },
+    res.json({ message: 'Film mis à jour avec succès', movie });
+  } catch (error) {
+    // Passer l'erreur au middleware de gestion des erreurs
+    next(error);
+  }
+},
 };
 
 module.exports = movieController;

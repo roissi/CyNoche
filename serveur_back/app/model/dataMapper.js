@@ -103,8 +103,8 @@ const dataMapper = {
     try {
       const result = await client.query(
         `
-              INSERT INTO movies (date, name, director, year, rating, letterboxd_url, tmdb_id) 
-              VALUES ($1, $2, $3, $4, $5, $6, $7)
+              INSERT INTO movies (date, name, director, year, rating, letterboxd_url, tmdb_id, overview_en, overview_fr) 
+              VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
               RETURNING *
               `,
         [
@@ -114,7 +114,9 @@ const dataMapper = {
           newMovie.year,
           newMovie.rating,
           newMovie.letterboxd_url,
-          newMovie.tmdb_id
+          newMovie.tmdb_id,
+          newMovie.overview_en,
+          newMovie.overview_fr
         ]
       );
       return result.rows[0];
@@ -126,8 +128,8 @@ const dataMapper = {
 
     // Mettre à jour un film existant
     async updateMovie(movieId, movieData) {
-      const columns = ['name', 'director', 'year', 'letterboxd_url', 'rating', 'tmdb_id'];
-      const values = [movieData.name, movieData.director, movieData.year, movieData.letterboxd_url, movieData.rating, movieData.tmdb_id];
+      const columns = ['name', 'director', 'year', 'letterboxd_url', 'rating', 'tmdb_id', 'overview_en', 'overview_fr'];
+      const values = [movieData.name, movieData.director, movieData.year, movieData.letterboxd_url, movieData.rating, movieData.tmdb_id, movieData.overview_en, movieData.overview_fr];
   
       // Supprimer les colonnes qui n'ont pas de valeur correspondante dans movieData
       for (let i = 0; i < columns.length; i++) {

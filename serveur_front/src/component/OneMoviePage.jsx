@@ -5,6 +5,7 @@ import axios from 'axios';
 import ColorModeToggle from './ColorModeToggle';
 import { useColorModeValue } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FaBook } from 'react-icons/fa';
 import letterboxdLogo from '../assets/img/letterboxd-decal-dots-neg-rgb-500px.png';
 import EditModal from './ModalEditMovie';
 import DeleteMovie from './ModalDeleteMovie';
@@ -17,6 +18,8 @@ const OneMoviePage = () => {
   const color = useColorModeValue("black", "white");
   const titleColor = useColorModeValue('#319593', '#79e3d6');
   const [movieDetails, setMovieDetails] = useState(null);
+  const [language, setLanguage] = useState('en');
+  const [error, setError] = useState(null);
 
   const handleMovieUpdate = (updatedMovie) => {
     setMovie(updatedMovie);
@@ -27,6 +30,11 @@ const OneMoviePage = () => {
     navigate("/movies");
   };
   
+  // Fonction pour changer la langue
+  const toggleLanguage = () => {
+    setLanguage((prevLang) => prevLang === 'en' ? 'fr' : 'en');
+  };
+
   useEffect(() => {
     const fetchMovie = async () => {
       try {
@@ -42,11 +50,16 @@ const OneMoviePage = () => {
         setMovieDetails(movieData);
       } catch (error) {
         console.error('Error fetching movie details:', error);
+        setError(error); // définir l'erreur lorsqu'une exception est attrapée
       }
     };
     
     fetchMovie();
   }, [id]);
+
+  if (error) {
+    return <Text>Une erreur s&apos;est produite lors de la récupération des détails du film. Veuillez réessayer.</Text>;
+  }
   
   if (!movie) {
     return <Text>Loading...</Text>;
@@ -86,13 +99,27 @@ const OneMoviePage = () => {
               src={movieDetails.posterUrl}
               alt="Movie Poster"
               width="250px"
+              boxShadow="dark-lg"
             />
           </Box>
         }
         <Box maxWidth="80ch" margin="auto">
-          <Text fontSize="lg" fontStyle="italic">{movieDetails ? movieDetails.overview : 'No overview available'}</Text>
+          <Flex justify="space-between" align="center">
+            <Text fontSize="lg" fontStyle="italic">
+              {movie ? (language === 'en' ? movie.overview_en : movie.overview_fr) : 'No overview available'}
+            </Text>
+          </Flex>
         </Box>
         <Box textAlign="center">
+          <Button 
+            variant='outline' 
+            colorScheme='teal' 
+            onClick={toggleLanguage} 
+            leftIcon={<FaBook />} // positionner l'icône à gauche
+            mr={5} // pour ajouter un peu d'espace à droite
+          >
+            {language === 'en' ? 'FR' : 'UK'} 
+          </Button>
           <EditModal
             movie={movie}
             onUpdate={handleMovieUpdate}
@@ -103,7 +130,7 @@ const OneMoviePage = () => {
             onDelete={handleMovieDelete}
           />
         </Box>
-        <Button as={Link} to="/movies" colorScheme='teal' size='md' _hover={{ textDecoration: 'none' }}>Back to all movies</Button>
+        <Button as={Link} to="/movies" colorScheme='teal' size='md'>Back to all movies</Button>
       </VStack>
     </Flex>
   );
