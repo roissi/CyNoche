@@ -16,7 +16,9 @@ CREATE TABLE "movies" (
   "year" INTEGER NOT NULL,
   "letterboxd_url" TEXT NOT NULL,
   "rating" DECIMAL NOT NULL,
-  "tmdb_id" INTEGER
+  "tmdb_id" INTEGER,
+  "overview_en" TEXT,
+  "overview_fr" TEXT
 );
 
 -- Seeding
