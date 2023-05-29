@@ -8,6 +8,7 @@ import lightLogo from './assets/img/CyNoche-transparent_light.png';
 import MoviesPage from './component/MoviesPage';
 import OneMoviePage from './component/OneMoviePage';
 import ColorModeToggle from './component/ColorModeToggle';
+import { MovieProvider } from './contexts/MovieContext';
 
 const Home = () => {
   const bgColor = useColorModeValue("#e4fff7", "gray.800");
@@ -49,14 +50,16 @@ function App() {
         justifyContent="center"
       >
         <Router>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/movies" element={<MoviesPage />} />
-            <Route path="/movies/:id" element={<OneMoviePage />} />
-            {/* Ajoutez vos autres routes ici */}
-            {/* <Route path="/directors" element={<DirectorsPage />} /> */}
-            {/* <Route path="/ratings" element={<RatingsPage />} /> */}
-          </Routes>
+          <MovieProvider>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/movies" element={<MoviesPage />} />
+              <Route path="/movies/:id" element={<OneMoviePage />} />
+              {/* Ajoutez vos autres routes ici */}
+              {/* <Route path="/directors" element={<DirectorsPage />} /> */}
+              {/* <Route path="/ratings" element={<RatingsPage />} /> */}
+            </Routes>
+          </MovieProvider>
         </Router>
       </Box>
     </ChakraProvider>

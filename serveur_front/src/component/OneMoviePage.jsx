@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Heading, Button, Box, Text, Flex, VStack, Image, Link as ChakraLink } from '@chakra-ui/react';
+import { Heading, Button, Box, Text, Flex, VStack, Image, Spinner, Link as ChakraLink } from '@chakra-ui/react';
 import { useParams, Link } from 'react-router-dom';
-import axios from 'axios';
 import ColorModeToggle from './ColorModeToggle';
 import { useColorModeValue } from '@chakra-ui/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FaBook } from 'react-icons/fa';
 import letterboxdLogo from '../assets/img/letterboxd-decal-dots-neg-rgb-500px.png';
 import EditModal from './ModalEditMovie';
 import DeleteMovie from './ModalDeleteMovie';
 import { useNavigate } from 'react-router-dom';
+import { fetchMovie } from '../contexts/MovieService';
+import StarRating from './StarRating';
 
 const OneMoviePage = () => {
   const { id } = useParams(); // utilisez useParams pour récupérer l'id
@@ -20,6 +20,7 @@ const OneMoviePage = () => {
   const [movieDetails, setMovieDetails] = useState(null);
   const [language, setLanguage] = useState('en');
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleMovieUpdate = (updatedMovie) => {
     setMovie(updatedMovie);
@@ -36,56 +37,57 @@ const OneMoviePage = () => {
   };
 
   useEffect(() => {
-    const fetchMovie = async () => {
+    const fetchData = async () => {
+      setIsLoading(true);
       try {
-        const response = await axios.get(`http://localhost:4500/movies/${id}`);
-        setMovie(response.data.movie);
-        
-        const tmdbResponse = await axios.get(`https://api.themoviedb.org/3/movie/${response.data.movie.tmdb_id}?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=fr-FR`);
-        const movieData = tmdbResponse.data;
-        const posterUrl = movieData.poster_path ? `https://image.tmdb.org/t/p/original${movieData.poster_path}` : null;
-        movieData.posterUrl = posterUrl;
-
-        console.log('TMDB movie details:', movieData);
+        const { movie, movieData } = await fetchMovie(id);
+        setMovie(movie);
         setMovieDetails(movieData);
+        setError(null);
       } catch (error) {
         console.error('Error fetching movie details:', error);
-        setError(error); // définir l'erreur lorsqu'une exception est attrapée
+        setError(error.message);
+      } finally {
+        setIsLoading(false);
       }
     };
-    
-    fetchMovie();
+
+    fetchData();
   }, [id]);
+
+  if (isLoading) {
+    return (
+      <Flex justify="center" align="center" minH="100vh">
+        <Spinner
+          thickness='4px'
+          speed='0.65s'
+          emptyColor='gray.800'
+          color='goldenrod'
+          size='xl'
+        />
+      </Flex>
+    )
+  }
 
   if (error) {
     return <Text>Une erreur s&apos;est produite lors de la récupération des détails du film. Veuillez réessayer.</Text>;
   }
-  
+
   if (!movie) {
-    return <Text>Loading...</Text>;
+    return <Text>Pas de film trouvé.</Text>;
   }
-    
+  
   return (
     <Flex direction="column" bgColor={bgColor} color={color} w="100%" minH="100vh" justifyContent="center" alignItems="center" position="relative">
       <Flex position="absolute" top={5} right={5}>
         <ColorModeToggle />
       </Flex>
       <VStack spacing={8}>
-        <Flex direction="row" alignItems="center">
-          <Heading size="2xl" color={titleColor} mr={5}>{movie.name}</Heading>
+        <Flex direction="row" alignItems="center" w="full" justifyContent="center">
+          <Heading size="2xl" color={titleColor}>{movie.name}</Heading>
         </Flex>
         <Box as="span" className="rating" ml="4">
-          {[...Array(5)].map((_, i) => {
-            if (movie.rating > i) {
-              if (i === Math.floor(movie.rating) && movie.rating % 1 >= 0.5) {
-                return <FontAwesomeIcon key={i} icon={['fas', 'star-half-alt']} color="goldenrod" size="2x" />
-              }
-  
-              return <FontAwesomeIcon key={i} icon={['fas', 'star']} color="goldenrod" size="2x" />
-            }
-  
-            return <FontAwesomeIcon key={i} icon={['far', 'star']} color="#808080" size="2x" />
-          })}
+          <StarRating rating={movie.rating} size="2x" />
         </Box>
         <Flex align="center">
           <Text fontSize="2xl">{movie.director} / {movie.year}</Text>
