@@ -1,8 +1,8 @@
-const client = require("../service/dbClient");
+import client from "../service/dbClient.js";
 
 const dataMapper = {
   // Récupérer tous les films et les trier par année décroissante
-  async getAllMovies() {
+  getAllMovies: async () => {
     const sqlQuery = `SELECT * FROM movies ORDER BY year DESC;`;
     let result;
     try {
@@ -15,13 +15,13 @@ const dataMapper = {
     return result;
   },
 
-    // Affiche le nombre de films dans ma BDD
-  async countMovies() {
+  // Affiche le nombre de films dans ma BDD
+  countMovies: async () => {
     const query = `
       SELECT COUNT(*)
       FROM movies
     `;
-  
+
     try {
       const result = await client.query(query);
       return result.rows[0].count;
@@ -30,13 +30,13 @@ const dataMapper = {
     }
   },
 
-  // Récupérer le résultat d'uine recherche
-  async searchMovies(searchQuery) {
+  // Récupérer le résultat d'une recherche
+  searchMovies: async (searchQuery) => {
     const query = {
       text: 'SELECT * FROM movies WHERE name ILIKE $1 OR director ILIKE $1',
       values: [`%${searchQuery}%`],
     };
-  
+
     try {
       const searchResults = await client.query(query);
       return searchResults.rows.length > 0 ? searchResults.rows : [];
@@ -46,7 +46,7 @@ const dataMapper = {
   },
 
   // Récupérer tous les films et les trier en fonction de l'option de tri spécifiée
-  async getAllMoviesBySort(sort = "year_desc") {
+  getAllMoviesBySort: async (sort = "year_desc") => {
     const sortOptions = {
       // Options de tri disponibles
       year_desc: { column: "year", direction: "DESC" },
@@ -72,7 +72,7 @@ const dataMapper = {
   },
 
   // Récupérer un film spécifique par son ID
-  async getMovieById(movieId) {
+  getMovieById: async (movieId) => {
     const sqlQuery = `SELECT * FROM movies WHERE id = $1;`;
     let result;
     try {
@@ -86,7 +86,7 @@ const dataMapper = {
   },
 
   // Supprimer un film spécifique par son ID
-  async deleteMovie(movieId) {
+  deleteMovie: async (movieId) => {
     try {
       const result = await client.query(`DELETE FROM movies WHERE id = $1;`, [
         movieId,
@@ -99,7 +99,7 @@ const dataMapper = {
   },
 
   // Créer un nouveau film
-  async createMovie(newMovie) {
+  createMovie: async (newMovie) => {
     try {
       const result = await client.query(
         `
@@ -126,40 +126,40 @@ const dataMapper = {
     }
   },
 
-    // Mettre à jour un film existant
-    async updateMovie(movieId, movieData) {
-      const columns = ['name', 'director', 'year', 'letterboxd_url', 'rating', 'tmdb_id', 'overview_en', 'overview_fr'];
-      const values = [movieData.name, movieData.director, movieData.year, movieData.letterboxd_url, movieData.rating, movieData.tmdb_id, movieData.overview_en, movieData.overview_fr];
-  
-      // Supprimer les colonnes qui n'ont pas de valeur correspondante dans movieData
-      for (let i = 0; i < columns.length; i++) {
-        if (values[i] === null || values[i] === undefined) {
-          columns.splice(i, 1);
-          values.splice(i, 1);
-          i--;
-        }
+  // Mettre à jour un film existant
+  updateMovie: async (movieId, movieData) => {
+    const columns = ['name', 'director', 'year', 'letterboxd_url', 'rating', 'tmdb_id', 'overview_en', 'overview_fr'];
+    const values = [movieData.name, movieData.director, movieData.year, movieData.letterboxd_url, movieData.rating, movieData.tmdb_id, movieData.overview_en, movieData.overview_fr];
+
+    // Supprimer les colonnes qui n'ont pas de valeur correspondante dans movieData
+    for (let i = 0; i < columns.length; i++) {
+      if (values[i] === null || values[i] === undefined) {
+        columns.splice(i, 1);
+        values.splice(i, 1);
+        i--;
       }
-  
-      values.push(movieId); // Ajouter movieId à la fin du tableau de valeurs
-  
-      const query = `
-        UPDATE movies
-        SET ${columns.map((column, i) => `${column} = $${i+1}`).join(', ')}
-        WHERE id = $${values.length}
-        RETURNING *;
-      `;
-  
-      try {
-        const result = await client.query(query, values);
-        return result.rows[0];
-      } catch (error) {
-        console.error(error);
-        throw error;
-      }
-    },
-  
+    }
+
+    values.push(movieId); // Ajouter movieId à la fin du tableau de valeurs
+
+    const query = `
+      UPDATE movies
+      SET ${columns.map((column, i) => `${column} = $${i+1}`).join(', ')}
+      WHERE id = $${values.length}
+      RETURNING *;
+    `;
+
+    try {
+      const result = await client.query(query, values);
+      return result.rows[0];
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
+
   // Ferme la connexion à la base de données
-  async closeConnection() {
+  closeConnection: async () => {
     try {
       await client.end();
     } catch (error) {
@@ -169,4 +169,4 @@ const dataMapper = {
   },
 };
 
-module.exports = dataMapper;
+export default dataMapper;
