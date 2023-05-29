@@ -1,51 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { Box, Button, Flex, Stack, VStack, Heading, Image, Input, Text, List, ListItem, Link as ChakraLink } from '@chakra-ui/react';
+import { Box, Button, Flex, Stack, VStack, Heading, Image, Input, Text, List, Spinner } from '@chakra-ui/react';
 import axios from 'axios';
-import letterboxdLogo from '../assets/img/letterboxd-decal-dots-neg-rgb-500px.png';
 import darkLogo from '../assets/img/CyNoche-transparent.png';
 import lightLogo from '../assets/img/CyNoche-transparent_light.png';
 import ColorModeToggle from './ColorModeToggle';
 import { useColorModeValue } from '@chakra-ui/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import MovieListItem from './MovieListItem';
 import AddModal from './ModalAddMovie';
+import SortButtons from './SortButtons';
+import { useMovies } from '../contexts/MovieContext';
+
+const MOVIES_PER_PAGE = 50;
   
 const MoviesPage = () => {
   const bgColor = useColorModeValue("#e4fff7", "gray.800");
   const color = useColorModeValue("black", "white");
-  const [allMovies, setAllMovies] = useState([]);
+  const logo = useColorModeValue(lightLogo, darkLogo);
+  const { allMovies, setAllMovies, currentPage, setCurrentPage, searchQuery, setSearchQuery, sort, setSort } = useMovies();
+
   const [displayedMovies, setDisplayedMovies] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const moviesPerPage = 80;
-  const [searchQuery, setSearchQuery] = useState('');
-  const [sort, setSort] = useState('year_desc');
   const [movieCount, setMovieCount] = useState(0);
-  const titleColor = useColorModeValue('#319593', '#79e3d6');
-  const hoverColor = useColorModeValue('black', 'white');
   const [searchPerformed, setSearchPerformed] = useState(false);
   const [moviesBeforeSearch, setMoviesBeforeSearch] = useState([]);
   const [pageBeforeSearch, setPageBeforeSearch] = useState(1);
-  const logo = useColorModeValue(lightLogo, darkLogo);
-  
-  // Créer la fonction fetchMovies
-  const fetchMovies = (endpoint) => {
-    axios.get(endpoint)
-      .then(res => {
-        setAllMovies(res.data.movies);
-        setMovieCount(res.data.count);
-      })
-      .catch(err => console.error(err));
-  };
- 
-  // Charger tous les films sans tri au montage du composant
-  useEffect(() => {
-    const endpoint = `http://localhost:4500/movies`;
-    fetchMovies(endpoint);
-  }, []);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Mon compteur ici
+  // Counter logic for movie count animation
   const [counter, setCounter] = useState(0);
-  const animationTime = 100; // en millisecondes
+  const animationTime = 100; // in milliseconds
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -62,16 +45,25 @@ const MoviesPage = () => {
 
     return () => clearInterval(intervalId);
   }, [movieCount]);
+  
+  // Fetch movies from the backend
+  const fetchMovies = (endpoint) => {
+    axios.get(endpoint)
+      .then(res => {
+        setAllMovies(res.data.movies);
+        setMovieCount(res.data.count);
+        setError(null); // reset error on successful request
+      })
+      .catch(err => {
+        console.error(err);
+        setError(err.message);
+      })
+      .finally(() => {
+        setIsLoading(false); // Set loading state to false after the request is completed
+      });
+  };
 
-  // Mettre à jour displayedMovies lorsque allMovies, sort, ou currentPage change
-  useEffect(() => {
-    const sortedMovies = sortMovies(allMovies, sort);
-    const start = (currentPage - 1) * moviesPerPage;
-    const end = start + moviesPerPage;
-    setDisplayedMovies(sortedMovies.slice(start, end));
-  }, [allMovies, sort, currentPage]);
-
-  // Fonction pour trier les films
+  // Function to sort movies
   function sortMovies(movies, sort) {
     if (!movies) {
       return [];
@@ -105,28 +97,37 @@ const MoviesPage = () => {
     default:
       throw new Error(`Invalid sort option: ${sort}`);
     }
-  
+    
     return sortedMovies;
   }
+ 
+  // Update displayedMovies when allMovies, sort, or currentPage changes
+  useEffect(() => {
+    const sortedMovies = sortMovies(allMovies, sort);
+    const start = (currentPage - 1) * MOVIES_PER_PAGE;
+    const end = start + MOVIES_PER_PAGE;
+    setDisplayedMovies(sortedMovies.slice(start, end));
+  }, [allMovies, sort, currentPage]);
+
+  // Load all movies without sorting when the component mounts
+  useEffect(() => {
+    const endpoint = `http://localhost:4500/movies`;
+    fetchMovies(endpoint);
+  }, []);
   
-  // La fonction searchMovies utilise maintenant fetchMovies
+  // Search movies using fetchMovies0
   const searchMovies = () => {
     const endpoint = `http://localhost:4500/movies/search?query=${encodeURIComponent(searchQuery)}`;
-    setMoviesBeforeSearch(allMovies);
-    setPageBeforeSearch(currentPage);
+    
+    // Si aucune recherche n'a été effectuée précédemment, sauvegarder l'état actuel des films et la page
+    if (!searchPerformed) {
+      setMoviesBeforeSearch(allMovies);
+      setPageBeforeSearch(currentPage);
+    }
+  
     fetchMovies(endpoint);
     setSearchPerformed(true);
   };
-
-  // Les fonctions de tri mettent à jour maintenant l'état 'sort'
-  const sortMoviesByNameAsc = () => setSort('name_asc');
-  const sortMoviesByNameDesc = () => setSort('name_desc');
-  const sortMoviesByYearAsc = () => setSort('year_asc');
-  const sortMoviesByYearDesc = () => setSort('year_desc');
-  const sortMoviesByDirecAsc = () => setSort('director_asc');
-  const sortMoviesByDirecDesc = () => setSort('director_desc');
-  const sortMoviesByRatingAsc = () => setSort('rating_asc');
-  const sortMoviesByRatingDesc = () => setSort('rating_desc');
 
   return (
     <Flex direction="column" bgColor={bgColor} color={color} w="100%" minH="100vh" pl={100} pr={100} justifyContent="space-between">
@@ -137,20 +138,40 @@ const MoviesPage = () => {
         <Heading>
           <Image src={logo} alt="CyNoche Logo" width="600px" height="300px"  objectFit="contain" />
         </Heading>
-        <Box display="flex" flexDirection="column" alignItems="center">
-          <Stack mb={4} spacing={4} direction='row' align='center'>
-            <Button colorScheme='teal' size='md' onClick={sortMoviesByNameAsc}>Name (A-Z)</Button>
-            <Button colorScheme='teal' size='md' onClick={sortMoviesByNameDesc}>Name (Z-A)</Button>
-            <Button colorScheme='teal' size='md' onClick={sortMoviesByYearAsc}>Year (old - new)</Button>
-            <Button colorScheme='teal' size='md' onClick={sortMoviesByYearDesc}>Year (new - old)</Button>
-          </Stack>
-          <Stack mb={10} spacing={4} direction='row' align='center'>
-            <Button colorScheme='teal' size='md' onClick={sortMoviesByDirecAsc}>Director (A-Z)</Button>
-            <Button colorScheme='teal' size='md' onClick={sortMoviesByDirecDesc}>Director (Z-A)</Button>
-            <Button colorScheme='teal' size='md' onClick={sortMoviesByRatingAsc}>Rating (0-5)</Button>
-            <Button colorScheme='teal' size='md' onClick={sortMoviesByRatingDesc}>Rating (5-0)</Button>
-          </Stack>
+        <SortButtons setSort={setSort} />
+
+        <Box mb={5}>
+          <Heading as="h2" mb="3">{searchPerformed ? "Search again ?" : "Come on, search..."}</Heading>
+          <form onSubmit={e => {
+            e.preventDefault();
+            setPageBeforeSearch(currentPage); // Sauvegarde de la page courante avant la recherche
+            searchMovies();
+            setSearchPerformed(true);
+          }}>
+            <Flex direction="column" alignItems="center" justify="center">
+              <Flex direction="row" justify="center" align="center">
+                <Input 
+                  type="text" 
+                  placeholder="Movie title or Director name" 
+                  value={searchQuery} 
+                  onChange={e => setSearchQuery(e.target.value)} 
+                  borderColor="gray.400"
+                  w="250px" 
+                />
+                <Button colorScheme='teal' size='md' ml="4" type='submit'>Search</Button>
+                {searchPerformed && (
+                  <Button colorScheme='teal' size='md' ml="4" onClick={() => {
+                    setAllMovies(moviesBeforeSearch);
+                    setCurrentPage(pageBeforeSearch); // Restauration de la page avant la recherche
+                    setSearchPerformed(false);
+                  }}>Back to list</Button>
+                )}
+              </Flex>
+            </Flex>
+          </form>
         </Box>
+        <Box height="30px" />
+
         <Flex direction="row" justify="center" align="flex-start" w="100%">
           <Box>
             <Heading as="h2" mb={10}>
@@ -158,40 +179,26 @@ const MoviesPage = () => {
               <Text as="span"> movies</Text>
             </Heading>
             <div>
-              <List spacing={2}>
-                {Array.isArray(displayedMovies) && displayedMovies.length > 0
-                  ? displayedMovies.map(movie => (
-                    <ListItem key={movie.id}>
-                      <Flex align="center">
-                        <ChakraLink as={RouterLink} to={`/movies/${movie.id}`} color={titleColor} _hover={{ color: hoverColor }} fontStyle="italic" fontWeight="bold">
-                          {movie.name}
-                        </ChakraLink>
-                        <Text as="span" mx={2}>-</Text>
-                        {movie.director} ({movie.year})
-                        <Box as="span" className="rating" ml="4">
-                          {[...Array(5)].map((_, i) => {
-                          // Si la note est supérieure à l'indice actuel, afficher une étoile pleine
-                            if (movie.rating > i) {
-                            // Si la note est un nombre à virgule flottante et si la partie décimale est au moins 0.5, afficher une étoile à moitié pleine
-                              if (i === Math.floor(movie.rating) && movie.rating % 1 >= 0.5) {
-                                return <FontAwesomeIcon key={i} icon={['fas', 'star-half-alt']} color="goldenrod" /> // étoile à moitié pleine
-                              }
-
-                              return <FontAwesomeIcon key={i} icon={['fas', 'star']} color="goldenrod" /> // étoile pleine
-                            }
-
-                            // Sinon, afficher une étoile vide
-                            return <FontAwesomeIcon key={i} icon={['far', 'star']} color="#808080" /> // étoile vide
-                          })}
-                        </Box>
-                        <ChakraLink href={movie.letterboxd_url} isExternal ml="2">
-                          <Image src={letterboxdLogo} alt="Letterboxd Info" boxSize="24px" />
-                        </ChakraLink>
-                      </Flex>
-                    </ListItem>
-                  ))
-                  : <Text color="goldenrod" fontStyle="italic">So sorry... No movie found. Did you spell the title of the film or the name of the director correctly?</Text>}
-              </List>
+              {isLoading ? (
+                <Spinner
+                  thickness='4px'
+                  speed='0.65s'
+                  emptyColor='gray.800'
+                  color='goldenrod'
+                  size='xl' />
+              ) : (
+                <>
+                  {error && <Text color="red">{`An error occurred: ${error}`}</Text>}
+                  <List spacing={2}>
+                    {Array.isArray(displayedMovies) && displayedMovies.length > 0 ? (
+                      displayedMovies.map(movie => (
+                        <MovieListItem key={movie.id} movie={movie} />
+                      ))
+                    ) : (
+                      <Text color="goldenrod" fontStyle="italic">So sorry... No movie found. Did you spell the title of the   film or the name of the director correctly?</Text>)}
+                  </List>
+                </>
+              )}
             </div>
           </Box>
 
@@ -206,38 +213,11 @@ const MoviesPage = () => {
             <Stack mt={10} mb={10} spacing={4} direction='row'>
               <Button colorScheme='teal' size='md' onClick={() => setCurrentPage(currentPage - 1)} isDisabled={currentPage === 1 || searchPerformed}>Previous
               </Button>
-              <Button colorScheme='teal' size='md' onClick={() => setCurrentPage(currentPage + 1)} isDisabled={currentPage === Math.ceil(movieCount / moviesPerPage) || searchPerformed}>Next
+              <Button colorScheme='teal' size='md' onClick={() => setCurrentPage(currentPage + 1)} isDisabled={currentPage === Math.ceil(movieCount / MOVIES_PER_PAGE) || searchPerformed}>Next
               </Button>
             </Stack>
           )}
-          <Heading as="h2" mb={3}>{searchPerformed ? "Search again ?" : "Come on, search..."}</Heading>
-          <form onSubmit={e => {
-            e.preventDefault();
-            setPageBeforeSearch(currentPage); // Sauvegarde de la page courante avant la recherche
-            searchMovies();
-            setSearchPerformed(true);
-          }}>
-            <Box display="flex" justifyContent="center">
-              <Input 
-                type="text" 
-                placeholder="Movie title or Director name" 
-                value={searchQuery} 
-                onChange={e => setSearchQuery(e.target.value)} 
-                borderColor="gray.400"
-                w="250px" 
-              />
-            </Box>
-            <Stack direction='row' justify='center' spacing={4} mt={4}>
-              <Button colorScheme='teal' size='md' type='submit'>Search</Button>
-              {searchPerformed && (
-                <Button colorScheme='teal' size='md' onClick={() => {
-                  setAllMovies(moviesBeforeSearch);
-                  setCurrentPage(pageBeforeSearch); // Restauration de la page avant la recherche
-                  setSearchPerformed(false);
-                }}>Back to list</Button>
-              )}
-            </Stack>
-          </form>
+          
           <Box mt={30} />
         </Box>
       </VStack>

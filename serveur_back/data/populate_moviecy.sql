@@ -1104,7 +1104,7 @@ INSERT INTO "movies" (date, name, director, year, letterboxd_url, rating) VALUES
 (now(),'C''est arrivé près de chez vous','Rémy Belvaux, André Bonzel, Benoît Poelvoorde','1992','https://boxd.it/1X7Q','4'),
 (now(),'La vie est belle','Roberto Benigni','1997','https://boxd.it/29Wm','2.5'),
 (now(),'L''année où la Terre a changé','Tom Beard','2021','https://boxd.it/uze2','3'),
-(now(),'Mare of Easttown','Craig Zobel','2021','https://boxd.it/u2h8','4.5'),
+(now(),'Mare of Easttown','Brad Ingelsby','2021','https://boxd.it/u2h8','4.5'),
 (now(),'Fran Lebowitz : pretend it''s a city','Martin Scorsese','2021','https://boxd.it/tlWs','1.5'),
 (now(),'Putin''s palace: history of world''s largest bribe','Alexeï Navalny','2021','https://boxd.it/tCmw','3'),
 (now(),'Le jeu de la dame','Scott Frank','2020','https://boxd.it/s1Ym','4'),
