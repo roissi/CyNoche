@@ -1,12 +1,11 @@
 {
+  "type": "module",
   "name": "cynoche",
   "private": true,
   "version": "0.0.0",
   "main": "index.js",
   "scripts": {
-    "stars": "main.js",
-    "build": "vite build",
-    "preview": "vite preview"
+    "start": "node index.js"
   },
   "devDependencies": {
     "vite": "^4.0.0"
