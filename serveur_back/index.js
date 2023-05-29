@@ -26,10 +26,6 @@ app.use((error, req, res, next) => {
   res.status(500).send({ message: "An error occurred" });
 });
 
-// configuration du moteur de template
-app.set("view engine", "ejs");
-app.set("views", __dirname + "/app/views");
-
 async function startServer() {
   try {
     await client.connect();
