@@ -1,15 +1,20 @@
+// Import the necessary elements from Chakra UI, useState and useEffect from React, and axios for making HTTP requests
 import { Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Input, FormControl, FormLabel } from "@chakra-ui/react"
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function MyModal({ movie, onUpdate }) {
+  // Use the useDisclosure hook from Chakra UI to control the opening and closing of the modal
   const { isOpen, onOpen, onClose } = useDisclosure()
+  
+  // State variables for storing form inputs
   const [name, setName] = useState("");
   const [director, setDirector] = useState("");
   const [year, setYear] = useState("");
   const [rating, setRating] = useState("");
   const [letterboxd_url, setUrl] = useState("");
 
+  // useEffect hook to set the form inputs to the current movie's details when the modal opens
   useEffect(() => {
     setName(movie.name);
     setDirector(movie.director);
@@ -21,6 +26,7 @@ function MyModal({ movie, onUpdate }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Create a new object with the updated movie details
     const movieUpdate = {
       name,
       director,
@@ -30,8 +36,10 @@ function MyModal({ movie, onUpdate }) {
     };
 
     try {
+      // Send a POST request to the update endpoint with the movie's id and the updated details
       const response = await axios.post(`http://localhost:4500/movies/update/${movie.id}`, movieUpdate);
       console.log(response.data);
+      // Call the onUpdate callback with the updated movie details and close the modal
       onUpdate(movieUpdate);
       onClose();
     } catch (error) {
@@ -50,6 +58,7 @@ function MyModal({ movie, onUpdate }) {
           <ModalCloseButton />
           <ModalBody>
             <form onSubmit={handleSubmit}>
+              {/* Form controls for the movie details with validation */}
               <FormControl isRequired>
                 <FormLabel>Title</FormLabel>
                 <Input placeholder="Title" value={name} onChange={(e) => setName(e.target.value)} />

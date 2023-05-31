@@ -11,8 +11,11 @@ import { useNavigate } from 'react-router-dom';
 import { fetchMovie } from '../contexts/MovieService';
 import StarRating from './StarRating';
 
+// The OneMoviePage component displays details of a single movie
 const OneMoviePage = () => {
-  const { id } = useParams(); // utilisez useParams pour récupérer l'id
+  // Use useParams to get the movie id from the route parameters
+  const { id } = useParams();
+  // State variables for movie, movieDetails, language, error and isLoading
   const [movie, setMovie] = useState(null);
   const bgColor = useColorModeValue("#e4fff7", "gray.800");
   const color = useColorModeValue("black", "white");
@@ -22,20 +25,23 @@ const OneMoviePage = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Function to handle updating of movie data after edit
   const handleMovieUpdate = (updatedMovie) => {
     setMovie(updatedMovie);
   };
 
+  // Function to handle deletion of movie
   const navigate = useNavigate();
   const handleMovieDelete = () => {
     navigate("/movies");
   };
   
-  // Fonction pour changer la langue
+  // Function to toggle language between 'en' and 'fr'
   const toggleLanguage = () => {
     setLanguage((prevLang) => prevLang === 'en' ? 'fr' : 'en');
   };
 
+  // UseEffect to fetch the movie and its details when the component mounts or id changes
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -55,8 +61,10 @@ const OneMoviePage = () => {
     fetchData();
   }, [id]);
 
+  // Display loading spinner while fetching data
   if (isLoading) {
     return (
+      // JSX for loading state
       <Flex justify="center" align="center" minH="100vh">
         <Spinner
           thickness='4px'
@@ -68,16 +76,18 @@ const OneMoviePage = () => {
       </Flex>
     )
   }
-
+  // Display error message if an error occurred during fetching
   if (error) {
     return <Text>Une erreur s&apos;est produite lors de la récupération des détails du film. Veuillez réessayer.</Text>;
   }
-
+  // Display message if no movie was found
   if (!movie) {
     return <Text>Pas de film trouvé.</Text>;
   }
   
+  // Display movie details
   return (
+    // JSX for displaying movie details
     <Flex direction="column" bgColor={bgColor} color={color} w="100%" minH="100vh" justifyContent="center" alignItems="center" position="relative">
       <Flex position="absolute" top={5} right={5}>
         <ColorModeToggle />

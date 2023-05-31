@@ -10,14 +10,18 @@ import AddModal from './ModalAddMovie';
 import SortButtons from './SortButtons';
 import { useMovies } from '../contexts/MovieContext';
 
+// Constant for number of movies displayed per page
 const MOVIES_PER_PAGE = 50;
   
 const MoviesPage = () => {
+  // Use color mode value from Chakra UI for color theming
   const bgColor = useColorModeValue("#e4fff7", "gray.800");
   const color = useColorModeValue("black", "white");
   const logo = useColorModeValue(lightLogo, darkLogo);
+  // Use movie context
   const { allMovies, setAllMovies, currentPage, setCurrentPage, searchQuery, setSearchQuery, sort, setSort } = useMovies();
 
+  // State for currently displayed movies, movie count, search and error states
   const [displayedMovies, setDisplayedMovies] = useState([]);
   const [movieCount, setMovieCount] = useState(0);
   const [searchPerformed, setSearchPerformed] = useState(false);
@@ -30,6 +34,7 @@ const MoviesPage = () => {
   const [counter, setCounter] = useState(0);
   const animationTime = 100; // in milliseconds
 
+  // Animation for the movie count
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCounter((prevCounter) => {
@@ -119,7 +124,7 @@ const MoviesPage = () => {
   const searchMovies = () => {
     const endpoint = `http://localhost:4500/movies/search?query=${encodeURIComponent(searchQuery)}`;
     
-    // Si aucune recherche n'a été effectuée précédemment, sauvegarder l'état actuel des films et la page
+    // If no search has been done previously, save the current state of the movies and the page
     if (!searchPerformed) {
       setMoviesBeforeSearch(allMovies);
       setPageBeforeSearch(currentPage);
@@ -129,6 +134,7 @@ const MoviesPage = () => {
     setSearchPerformed(true);
   };
 
+  // JSX returned by the component
   return (
     <Flex direction="column" bgColor={bgColor} color={color} w="100%" minH="100vh" pl={100} pr={100} justifyContent="space-between">
       <Flex position="absolute" top={5} right={5}>
