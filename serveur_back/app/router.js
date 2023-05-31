@@ -1,17 +1,25 @@
+// Import express module
 import express from "express";
+// Create a new router object
 const router = express.Router();
 
-// This code is importing the movieController module from the controller folder. The movieController module is a JavaScript file that contains functions related to the manipulation of movie data.
+// Import the movieController module from the controller directory
 import movieController from "./controller/movieController.js";
 
-// This code is setting up routes for a movie controller. The first route is for getting all movies, the second route is for getting all movies sorted, the third route is for getting a movie by its id, the fourth route is for deleting a movie by its id, the fifth route is for creating a movie, and the sixth route is for updating a movie by its id.
+// Define a route to get all movies
 router.get("/movies", movieController.getAllMovies);
+// Define a route to search for movies
 router.get("/movies/search", movieController.searchMovies);
+// Define a route to get all movies sorted in a specific order
 router.get("/movies/sort", movieController.getAllMoviesBySort);
+// Define a route to get a movie by its ID
 router.get("/movies/:id", movieController.getMovieById);
+// Define a route to delete a movie by its ID
 router.post("/movies/delete/:id", movieController.deleteMovie);
+// Define a route to create a new movie
 router.post("/movies", movieController.createMovie);
+// Define a route to update an existing movie by its ID
 router.post("/movies/update/:id", movieController.updateMovie);
 
-// This code is used in Node.js to export a router object from a module. The router object is used to define routes and associated HTTP verbs (GET, POST, PUT, DELETE, etc.) that will be used to handle incoming requests.
+// Export the router object so it can be used in other modules
 export default router;
