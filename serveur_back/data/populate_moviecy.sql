@@ -603,7 +603,7 @@ INSERT INTO "movies" (date, name, director, year, letterboxd_url, rating) VALUES
 (now(),'Jessica Forever','Caroline Poggi and Jonathan Vinel','2018','https://boxd.it/iELc','2.5'),
 (now(),'L''époque','Matthieu Bareyre','2018','https://boxd.it/jAGO','2.5'),
 (now(),'Tel Aviv on Fire','Sameh Zoabi','2018','https://boxd.it/jE0M','2'),
-(now(),'Sibyl','Justine Triet','2019','https://boxd.it/kum6','1'),
+(now(),'Sibyl','Justine Triet','2019','https://boxd.it/kum6','3.5'),
 (now(),'Godzilla II - roi des monstres','Michael Dougherty','2019','https://boxd.it/cY7Y','0.5'),
 (now(),'The dead don''t die','Jim Jarmusch','2019','https://boxd.it/juZg','0.5'),
 (now(),'Paterson','Jim Jarmusch','2016','https://boxd.it/cRk2','4'),
@@ -1889,6 +1889,9 @@ INSERT INTO "movies" (date, name, director, year, letterboxd_url, rating) VALUES
 (now(),'Crime à froid','Bo Arne Vibenius','1973','https://boxd.it/1MZs','4'),
 (now(),'Isolation','Billy O''Brien','2005','https://boxd.it/1uKa','3'),
 (now(),'John Wick : chapitre 4','Chad Stahelski','2023','https://boxd.it/mh48','2.5'),
-(now(),'Quatre étoiles','Christian Vincent','2006','https://boxd.it/1Pw4','2');
+(now(),'Quatre étoiles','Christian Vincent','2006','https://boxd.it/1Pw4','2'),
+(now(),'Terrain d''entente','Bobby Farrelly, Peter Farrelly','2005','https://boxd.it/1TR6','3.5'),
+(now(),'La défense Lincoln','Brad Furman','2011','https://boxd.it/DRM','3.5'),
+(now(),'Sick of myself','Kristoffer Borgli','2023','https://boxd.it/tEzs','3');
 
 COMMIT;

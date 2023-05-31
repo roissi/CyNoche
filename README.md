@@ -1,84 +1,94 @@
 # CyNoche
 
-CyNoche est une application web de critiques de films conçue pour aider les amateurs de cinéma à découvrir de nouveaux films, à partager leurs avis et à interagir avec d'autres passionnés. L'application propose un catalogue de films, la possibilité de noter et de critiquer chaque film, ainsi qu'une fonctionnalité de recherche pour faciliter la navigation dans le catalogue.
+CyNoche is a web application that catalogs (almost) every movie I've seen in my life.
 
-CyNoche est construit avec React et Chackra UI. Il utilise une API fournissant les data (films et informations sur les films). Pour le stockage des données, l'application utilise PostgreSQL.
+CyNoche is built with React and Chakra UI. It uses an API to provide data (movies, ratings out of 5, directors, release years, posters, and summaries). For data storage, the application uses PostgreSQL.
 
-## Fonctionnalités 
+## Features 
 
-- Affichage d'un catalogue de films
-- Système de notation par étoiles (sur 5)
-- Ajout d'un film dans la BDD
-- Modification des informations d'un film dans la BDD
-- Supression d'un film dans la BDD
-- Recherche de films (titres et/ou réalisateurs)
-- Fiche du film sélectionné (affiche + pitch)
-- Version FR ou UK
-- Dark ou light mode
+- Display of a movie catalog
+- Star rating system (out of 5)
+- Sorting by movie names, directors' names, release years, and ratings
+- Adding a movie to the database
+- Modifying a movie's information in the database
+- Deleting a movie in the database
+- Searching for movies (titles and/or directors)
+- Selected movie's card (poster + summary)
+- French or English version
+- Dark or light mode
 
-## Prérequis pour l'installation locale
+## Requirements for local installation
 
-- Node.js et npm installés sur votre machine
-- PostgreSQL installé et configuré sur votre machine
-- API fournissant les données des films
+- Node.js and npm installed on your machine
+- PostgreSQL installed and configured on your machine
 
-## Installation en local
+## Local installation
+
+1. Clone this repository to your local machine using:
+HTTPS: `https://github.com/roissi/CyNoche.git` or SSH: `git clone git@github.com:roissi/CyNoche.git`
+
+### Backend (API and Database)
+
+2. Navigate to the Back directory of the project:
+`cd serveur_back`
+
+3. Make sure PostgreSQL is running on your machine. You can start PostgreSQL with the command specific to your operating system.
+
+4. Create a database named `movie`.
+
+5. Switch to Node 18 and install dependencies:
+`nvm use 18`
+`npm install`
+
+6. Launch the SQL script under Postgres to structure and fill the database:
+`psql -U user -d nom de la BDD -f data/populate_movicy.sql`
+
+7. Launch the Node script to refresh data with an external API (TMDB):
+`node updateTmdbIds.js` (be patient, this can take some time if you use my data)
+
+8. Launch the API:
+`npm start`
 
 ### Frontend
 
-1. Clonez ce dépôt sur votre machine locale en utilisant :
+9. Open a new terminal and navigate to the Front directory of the project:
+`cd serveur_front`
 
-HTTPS :`https://github.com/roissi/CyNoche.git`
-
-SSH : `git clone git@github.com:roissi/CyNoche.git`
-
-2. Naviguez vers le répertoire du projet :
-`cd cynoche`
-`bash`
-`Copy code`
-
-3. Installez les dépendances du projet :
+4. Switch to Node 18 and install dependencies:
+`nvm use 18`
 `npm install`
 
-markdown
-Copy code
-
-4. Lancez l'application en mode développement :
+4. Launch the application:
 `npm start`
 
-5. Ouvrez votre navigateur et visitez `http://localhost:3000`
+5. Open your browser and visit `http://localhost:3000`
 
-### Backend (API et Base de données)
-
-1. Assurez-vous que PostgreSQL est en cours d'exécution sur votre machine. Vous pouvez démarrer PostgreSQL avec la commande spécifique à votre système d'exploitation.
-
-2. Assurez-vous également de lancer l'API qui fournit les données de films. Suivez les instructions fournies avec l'API pour savoir comment la démarrer.
-
-Remarque : Ces instructions supposent que vous avez accès à l'API fournissant les données des films et que vous l'avez configurée correctement. Assurez-vous que l'API est en cours d'exécution et accessible depuis votre application frontend.
 
 ## Technologies et dépendances utilisées
 
 ### Backend
-- Node.js (v18.12.1) : environnement d'exécution côté serveur pour JavaScript.
-- Express.js : framework pour créer des applications web sur Node.js.
-- PostgreSQL : système de gestion de base de données relationnelle.
-- CORS : middleware pour activer le partage de ressources entre origines multiples (Cross-Origin Resource Sharing).
-- Axios : bibliothèque pour faire des requêtes HTTP depuis le navigateur et Node.js.
-- Dotenv : pour charger les variables d'environnement à partir d'un fichier .env.
+- Node.js (v18.12.1): server-side runtime environment for JavaScript.
+- Express.js: framework for creating web applications on Node.js.
+- PostgreSQL: relational database management system.
+- CORS: middleware to enable cross-origin resource sharing.
+- Axios: library for making HTTP requests from the browser and Node.js.
+- Dotenv: to load environment variables from a .env file.
 
 ### Frontend
-- React.js : bibliothèque JavaScript pour créer des interfaces utilisateur.
-- Chakra UI : bibliothèque de composants UI pour React.
-- Axios : bibliothèque pour faire des requêtes HTTP depuis le navigateur et Node.js.
-- React-router-dom : bibliothèque de routage pour React.
-- React-query : bibliothèque pour la gestion des états de requête (fetching, caching, synchronization).
-- React-icons : bibliothèque d'icônes pour React.
-- @fortawesome/fontawesome-svg-core : bibliothèque d'icônes de Font Awesome pour React.
-- @fortawesome/free-solid-svg-icons : pack d'icônes solides de Font Awesome.
-- @fortawesome/free-regular-svg-icons : pack d'icônes régulières de Font Awesome.
+- React.js: JavaScript library for building user interfaces.
+- Chakra UI: UI component library for React.
+- Axios: library for making HTTP requests from the browser and Node.js.
+- React-router-dom: routing library for React.
+- React-query: library for query state management (fetching, caching, synchronization).
+- React-icons: icon library for React.
+- Font Awesome.
 
 ### Outils de développement
-- ESLint : linter pour JavaScript et JSX, utilisé pour détecter les erreurs et les problèmes de pattern dans le code JavaScript.
-- Jest : framework de tests pour JavaScript.
-- @testing-library/react : bibliothèque de tests pour React, utilisée avec Jest.
-- web-vitals : pour mesurer et analyser la performance de l'application web.
+- ESLint: linter for JavaScript and JSX, used to detect errors and pattern problems in JavaScript code.
+- Jest: testing framework for JavaScript.
+- @testing-library/react: testing library for React, used with Jest.
+- web-vitals: to measure and analyze the performance of the web application.
+
+[Read the french version of README.md](https://github.com/roissi/CyNoche/blob/master/README_FR.md)
+
+// roissi / May 2023 //
