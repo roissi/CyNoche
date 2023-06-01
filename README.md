@@ -63,8 +63,30 @@ HTTPS: `https://github.com/roissi/CyNoche.git` or SSH: `git clone git@github.com
 
 5. Open your browser and visit `http://localhost:3000`
 
+## Environment variables configuration
 
-## Technologies et dépendances utilisées
+For the application to function correctly on your machine, you will need to set certain environment variables. Here are the steps to follow:
+
+### For the Frontend :
+1. In `serveur_front`, directory, copy the `.env.example` file and rename this copy to `.env`.
+
+2. Open the new `.env` file and add your own TMDB API key as the value of `REACT_APP_TMDB_API_KEY` avec votre propre clé API TMDB. You can obtain a TMDB API key by creating an account on the [TMDB website](https://www.themoviedb.org/).
+
+### For the Backend (API) :
+
+1. In `serveur_back`, directory, copy the `.env.example` file and rename this copy to `.env`.
+
+2. Open the new `.env` file and fill in the values as follows:
+
+`PORT=4500`
+`PGUSER=<your PostgreSQL username>`
+`PGHOST=localhost`
+`PGDATABASE=movie`
+`TMDB_API_KEY=<your own TMDB API key>`
+
+Replace `<your PostgreSQL username>` with your PostgreSQL username and `<your own TMDB API key>` with your TMDB API key.
+
+## Technologies and dependencies
 
 ### Backend
 - Node.js (v18.12.1): server-side runtime environment for JavaScript.
@@ -83,7 +105,7 @@ HTTPS: `https://github.com/roissi/CyNoche.git` or SSH: `git clone git@github.com
 - React-icons: icon library for React.
 - Font Awesome.
 
-### Outils de développement
+### Development tools
 - ESLint: linter for JavaScript and JSX, used to detect errors and pattern problems in JavaScript code.
 - Jest: testing framework for JavaScript.
 - @testing-library/react: testing library for React, used with Jest.

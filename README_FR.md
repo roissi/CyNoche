@@ -63,6 +63,28 @@ HTTPS :`https://github.com/roissi/CyNoche.git` ou SSH : `git clone git@github.co
 
 5. Ouvrez votre navigateur et visitez `http://localhost:3000`
 
+## Configuration des variables d'environnement
+
+Pour que l'application fonctionne correctement sur votre machine, vous devez définir certaines variables d'environnement. Voici les étapes à suivre :
+
+### Pour le Frontend :
+1. Dans le répertoire `serveur_front`, copiez le fichier `.env.example` et renommez cette copie `.env`.
+
+2. Ouvrez le nouveau fichier `.env` et ajoutez la valeur de `REACT_APP_TMDB_API_KEY` avec votre propre clé API TMDB. Vous pouvez obtenir une clé API TMDB en créant un compte sur [le site de TMDB](https://www.themoviedb.org/).
+
+### Pour le Backend (API) :
+
+1. Dans le répertoire `serveur_back`, copiez le fichier `.env.example` et renommez cette copie `.env`.
+
+2. Ouvrez le nouveau fichier `.env` et remplissez les valeurs comme suit :
+
+`PORT=4500`
+`PGUSER=<votre nom d'utilisateur PostgreSQL>`
+`PGHOST=localhost`
+`PGDATABASE=movie`
+`TMDB_API_KEY=<votre propre clé API TMDB>`
+
+Remplacez `<votre nom d'utilisateur PostgreSQL>` par votre nom d'utilisateur PostgreSQL et `<votre propre clé API TMDB>` par votre clé API TMDB.
 
 ## Technologies et dépendances utilisées
 
