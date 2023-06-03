@@ -38,3 +38,18 @@ export const fetchMovieFromDatabase = async (id) => {
 
   return movie;
 };
+
+// An async function to fetch all movies from your local server
+export const fetchThumbnailsFromDatabase = async () => {
+  const url = `http://localhost:4500/movies`;
+  console.log(`Fetching all movies from ${url}`); // Add a log before the request
+  // Request the movie data from your local server
+  const response = await axios.get(url);
+  // Extract the movie array from the response
+  const movies = response.data.movies;
+
+  // Log each movie's details
+  console.log(`Fetched movies:`, movies);
+
+  return movies;
+};

@@ -11,70 +11,38 @@ import OneMoviePage from './component/OneMoviePage'; // The OneMoviePage compone
 import ColorModeToggle from './component/ColorModeToggle'; // The ColorModeToggle component to toggle between dark and light modes
 import { MovieProvider } from './contexts/MovieContext'; // The MovieProvider component from the Movie context that provides state for the movie
 import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { fetchMovieFromDatabase } from './contexts/MovieService'; // changed fetchMovies to fetchMoviesFromDatabase and added fetchMovieDetailsFromTMDB
+import { fetchThumbnailsFromDatabase, fetchMovieDetailsFromTMDB } from './contexts/MovieService'; // changed fetchMovies to fetchMoviesFromDatabase and added fetchMovieDetailsFromTMDB
 
 // The Home component for the home page of my application
 const Home = () => {
   const [movies, setMovies] = useState([]); // Pour stocker les films de 2023
 
-  function fetchMovieDetailsFromTMDB(movieId) {
-    return axios.get(`http://localhost:4500/movies/${movieId}`)
-      .then(response => {
-        if (response.status === 200) {
-          return response.data;
-        } else {
-          return Promise.reject(new Error(`Failed to fetch movie details, status code: ${response.status}`));
-        }
-      })
-      .catch(error => {
-        // Return a rejected Promise, so the error can be caught in the calling function
-        return Promise.reject(error);
-      });
-  }
-  
-  // Inside your component
   useEffect(() => {
     // Call fetchMovies() from your own database
-    fetchMovieFromDatabase()
+    fetchThumbnailsFromDatabase()
       .then(allMovies => {
-        console.log(allMovies); // Log all movies
+        console.log(allMovies[0]); // Log the movies to the console
   
-        // Verify each movie has an id property
-        allMovies.forEach(movie => {
-          if (!('id' in movie)) { // utilisez 'in' à la place de hasOwnProperty
-            console.warn('Movie object missing id property:', movie);
-          }
-        });
-
         // Filter the movies to only include those from 2023
         const movies2023 = allMovies.filter(movie => movie.year === 2023);
   
         // Fetch additional details including images for each movie from TMDB
         Promise.all(
-          movies2023.map(movie => {
-            console.log(movie.id);
-  
-            return fetchMovieDetailsFromTMDB(movie.id)
-              .then(movieDetails => {
-                console.log(movieDetails); // Log movie details
-  
-                return movieDetails;
-              })
-              .catch(error => {
-                console.error(`Failed to fetch details for movie ${movie.id}:`, error);
-              })
-          })
+          movies2023.map(movie =>
+            fetchMovieDetailsFromTMDB(movie.id).catch(error => {
+              console.error(`Failed to fetch details for movie ${movie.id}:`, error);
+            })
+          )
         )
           .then(movieDetailsList => {
             const updatedMovies2023 = movies2023.map((movie, index) => ({
               ...movie,
               ...movieDetailsList[index]
             }));
-  
+
             // Set the state to the updated movies from 2023
             setMovies(updatedMovies2023);
-  
+
             // Log the updated state
             console.log(updatedMovies2023);
           })
@@ -106,7 +74,7 @@ const Home = () => {
           <Image src={logo} alt="CyNoche Logo" width="1200px" height="300px"  objectFit="contain" />
         </Heading>
         <VStack spacing={3}>
-          <Flex direction="row" wrap="wrap" justifyContent="center" alignItems="center">
+          <Flex direction="row" wrap="wrap" justifyContent="center" alignItems="center" mb={5}>
             {movies.map((movie) => (
               <Box key={movie.id} m={2}> 
                 <Image src={movie.posterUrl} width="80px" boxShadow="dark-lg" />
