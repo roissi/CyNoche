@@ -1,8 +1,8 @@
 // Import the axios library, which is used to make HTTP requests
 import axios from 'axios';
 
-// An async function to fetch data for a specific movie
-export const fetchMovie = async (id) => {
+// An async function to fetch data for a specific movie from TMDB
+export const fetchMovieDetailsFromTMDB = async (id) => {
   // Request the movie data from your local server
   const response = await axios.get(`http://localhost:4500/movies/${id}`);
   // Extract the movie object from the response
@@ -20,6 +20,21 @@ export const fetchMovie = async (id) => {
   // Log the movie data to the console
   console.log('TMDB movie details:', movieData);
 
-  // Return both the original movie data and the TMDB movie data
-  return { movie, movieData };
+  // Return the TMDB movie data
+  return movieData;
+};
+
+// An async function to fetch all movies from your local server
+export const fetchMovieFromDatabase = async (id) => {
+  const url = `http://localhost:4500/movies/${id}`;
+  console.log(`Fetching movie from ${url}`); // Add a log before the request
+  // Request the movie data from your local server
+  const response = await axios.get(url);
+  // Extract the movie array from the response
+  const movie = response.data.movie;
+
+  // Log each movie's details
+  console.log(`Fetched movies:`, movie);
+
+  return movie;
 };

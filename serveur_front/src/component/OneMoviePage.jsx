@@ -8,7 +8,7 @@ import letterboxdLogo from '../assets/img/letterboxd-decal-dots-neg-rgb-500px.pn
 import EditModal from './ModalEditMovie';
 import DeleteMovie from './ModalDeleteMovie';
 import { useNavigate } from 'react-router-dom';
-import { fetchMovie } from '../contexts/MovieService';
+import { fetchMovieFromDatabase, fetchMovieDetailsFromTMDB } from '../contexts/MovieService';
 import StarRating from './StarRating';
 
 // The OneMoviePage component displays details of a single movie
@@ -46,7 +46,8 @@ const OneMoviePage = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const { movie, movieData } = await fetchMovie(id);
+        const movie = await fetchMovieFromDatabase(id);
+        const movieData = await fetchMovieDetailsFromTMDB(id);
         setMovie(movie);
         setMovieDetails(movieData);
         setError(null);
