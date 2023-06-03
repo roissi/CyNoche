@@ -79,11 +79,11 @@ const OneMoviePage = () => {
   }
   // Display error message if an error occurred during fetching
   if (error) {
-    return <Text>Une erreur s&apos;est produite lors de la récupération des détails du film. Veuillez réessayer.</Text>;
+    return <Text>An error occurred while retrieving movie details. Please, try Again.</Text>;
   }
   // Display message if no movie was found
   if (!movie) {
-    return <Text>Pas de film trouvé.</Text>;
+    return <Text>No movie found.</Text>;
   }
   
   // Display movie details
@@ -128,8 +128,8 @@ const OneMoviePage = () => {
             variant='outline' 
             colorScheme='teal' 
             onClick={toggleLanguage} 
-            leftIcon={<FaBook />} // positionner l'icône à gauche
-            mr={5} // pour ajouter un peu d'espace à droite
+            leftIcon={<FaBook />} // Position the icon on the left
+            mr={5} // To add some space to the right
           >
             {language === 'en' ? 'FR' : 'UK'} 
           </Button>

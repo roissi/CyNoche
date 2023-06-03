@@ -57,7 +57,7 @@ const MoviesPage = () => {
       .then(res => {
         setAllMovies(res.data.movies);
         setMovieCount(res.data.count);
-        setError(null); // reset error on successful request
+        setError(null); // Reset error on successful request
       })
       .catch(err => {
         console.error(err);
@@ -150,7 +150,7 @@ const MoviesPage = () => {
           <Heading as="h2" mb="3">{searchPerformed ? "Search again ?" : "Come on, search..."}</Heading>
           <form onSubmit={e => {
             e.preventDefault();
-            setPageBeforeSearch(currentPage); // Sauvegarde de la page courante avant la recherche
+            setPageBeforeSearch(currentPage); // Saving the current page before searching
             searchMovies();
             setSearchPerformed(true);
           }}>
@@ -168,7 +168,7 @@ const MoviesPage = () => {
                 {searchPerformed && (
                   <Button colorScheme='teal' size='md' ml="4" onClick={() => {
                     setAllMovies(moviesBeforeSearch);
-                    setCurrentPage(pageBeforeSearch); // Restauration de la page avant la recherche
+                    setCurrentPage(pageBeforeSearch); // Restoring the page before the search
                     setSearchPerformed(false);
                   }}>Back to list</Button>
                 )}
@@ -210,7 +210,7 @@ const MoviesPage = () => {
 
           {!searchPerformed && (
             <Box ml={5}>
-              <AddModal /> {/* Ajout du composant AddModal ici */}
+              <AddModal />
             </Box>
           )}
         </Flex>
