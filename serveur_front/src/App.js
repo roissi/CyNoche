@@ -10,9 +10,51 @@ import MoviesPage from './component/MoviesPage'; // The MoviesPage component to 
 import OneMoviePage from './component/OneMoviePage'; // The OneMoviePage component to show a single movie details
 import ColorModeToggle from './component/ColorModeToggle'; // The ColorModeToggle component to toggle between dark and light modes
 import { MovieProvider } from './contexts/MovieContext'; // The MovieProvider component from the Movie context that provides state for the movie
+import { useState, useEffect } from 'react';
+import { fetchThumbnailsFromDatabase, fetchMovieDetailsFromTMDB } from './contexts/MovieService'; // changed fetchMovies to fetchMoviesFromDatabase and added fetchMovieDetailsFromTMDB
 
 // The Home component for the home page of my application
 const Home = () => {
+  const [movies, setMovies] = useState([]); // Pour stocker les films de 2023
+
+  useEffect(() => {
+    // Call fetchMovies() from your own database
+    fetchThumbnailsFromDatabase()
+      .then(allMovies => {
+        console.log(allMovies[0]); // Log the movies to the console
+  
+        // Filter the movies to only include those from 2023
+        const movies2023 = allMovies.filter(movie => movie.year === 2023);
+  
+        // Fetch additional details including images for each movie from TMDB
+        Promise.all(
+          movies2023.map(movie =>
+            fetchMovieDetailsFromTMDB(movie.id).catch(error => {
+              console.error(`Failed to fetch details for movie ${movie.id}:`, error);
+            })
+          )
+        )
+          .then(movieDetailsList => {
+            const updatedMovies2023 = movies2023.map((movie, index) => ({
+              ...movie,
+              ...movieDetailsList[index]
+            }));
+
+            // Set the state to the updated movies from 2023
+            setMovies(updatedMovies2023);
+
+            // Log the updated state
+            console.log(updatedMovies2023);
+          })
+          .catch(error => {
+            console.error('Failed to fetch movie details:', error);
+          });
+      })
+      .catch(error => {
+        console.error('Failed to fetch movies:', error);
+      });
+  }, []);
+
   // Using Chakra UI color mode hook to get the color values based on the current color mode
   const bgColor = useColorModeValue("#e4fff7", "gray.800");
   const color = useColorModeValue("white", "black");
@@ -32,6 +74,13 @@ const Home = () => {
           <Image src={logo} alt="CyNoche Logo" width="1200px" height="300px"  objectFit="contain" />
         </Heading>
         <VStack spacing={3}>
+          <Flex direction="row" wrap="wrap" justifyContent="center" alignItems="center" mb={5}>
+            {movies.map((movie) => (
+              <Box key={movie.id} m={2}> 
+                <Image src={movie.posterUrl} width="80px" boxShadow="dark-lg" />
+              </Box>
+            ))}
+          </Flex>
           <ChakraLink as={RouterLink} to="/movies" fontSize="1.5em" color={linkColor} _hover={{ color: hoverColor }}>Click here to see all movies</ChakraLink>
           <ChakraLink as={RouterLink} isExternal to="https://github.com/roissi/CyNoche" fontSize="1.5em" color={linkColor2} _hover={{ color: hoverColor }}>Click here to see the GitHub repository</ChakraLink>
           <ChakraLink as={RouterLink} isExternal to="https://github.com/roissi/CyNoche/blob/master/README.md" fontSize="1.5em" color={linkColor2} _hover={{ color: hoverColor }}>Click here to README.md</ChakraLink>

@@ -1892,6 +1892,9 @@ INSERT INTO "movies" (date, name, director, year, letterboxd_url, rating) VALUES
 (now(),'Quatre étoiles','Christian Vincent','2006','https://boxd.it/1Pw4','2'),
 (now(),'Terrain d''entente','Bobby Farrelly, Peter Farrelly','2005','https://boxd.it/1TR6','3.5'),
 (now(),'La défense Lincoln','Brad Furman','2011','https://boxd.it/DRM','3.5'),
-(now(),'Sick of myself','Kristoffer Borgli','2023','https://boxd.it/tEzs','3');
+(now(),'Sick of myself','Kristoffer Borgli','2023','https://boxd.it/tEzs','3'),
+(now(),'Désordres','Cyril Schäublin','2022','https://boxd.it/s6u2','4.5'),
+(now(),'Anatomie d''une chute','Justine Triet','2023','https://boxd.it/yuDE','5'),
+(now(),'Monster','Patty Jenkins','2003','https://boxd.it/2afy','4');
 
 COMMIT;
