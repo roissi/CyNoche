@@ -10,7 +10,7 @@ function ModalDeleteMovie({ movie, onDelete, ...props }) {
     try {
       // Send a DELETE request to the server for the movie with the given ID
       const response = await axios.post(`http://localhost:4500/movies/delete/${movie.id}`);
-      // handle response based on status
+      // Handle response based on status
       if (response.status === 200) {
         console.log(response.data.message);
         // If the movie was deleted successfully, call the onDelete function (passed in as a prop) and close the modal

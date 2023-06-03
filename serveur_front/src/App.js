@@ -10,12 +10,12 @@ import MoviesPage from './component/MoviesPage'; // The MoviesPage component to 
 import OneMoviePage from './component/OneMoviePage'; // The OneMoviePage component to show a single movie details
 import ColorModeToggle from './component/ColorModeToggle'; // The ColorModeToggle component to toggle between dark and light modes
 import { MovieProvider } from './contexts/MovieContext'; // The MovieProvider component from the Movie context that provides state for the movie
-import { useState, useEffect } from 'react';
-import { fetchThumbnailsFromDatabase, fetchMovieDetailsFromTMDB } from './contexts/MovieService'; // changed fetchMovies to fetchMoviesFromDatabase and added fetchMovieDetailsFromTMDB
+import { useState, useEffect } from 'react'; // useState and useEffect are React hooks. useState is used to add React state to functional components, and useEffect is used to execute side effects in functional components. Side effects are operations you want to perform alongside rendering, such as data fetching, subscriptions, or manually changing the React DOM.
+import { fetchThumbnailsFromDatabase, fetchMovieDetailsFromTMDB } from './contexts/MovieService'; // These are two functions imported from the MovieService.js file which is located in the contexts directory. fetchThumbnailsFromDatabase is used to get movie thumbnails from the database, and fetchMovieDetailsFromTMDB to fetch specific movie details from The Movie Database (TMDB) API.
 
 // The Home component for the home page of my application
 const Home = () => {
-  const [movies, setMovies] = useState([]); // Pour stocker les films de 2023
+  const [movies, setMovies] = useState([]); // To store 2023 movies
 
   useEffect(() => {
     // Call fetchMovies() from your own database

@@ -7,5 +7,5 @@ import { faStar as solidStar, faStarHalfAlt } from '@fortawesome/free-solid-svg-
 import { faStar as regularStar } from '@fortawesome/free-regular-svg-icons';
 
 // Call the add function on the library object, passing the icons we wish to use.
-// This function essentially registers these icons with the library, so we can use them elsewhere in our app.
+// This function essentially registers these icons with the library, so we can use them elsewhere in my app.
 library.add(solidStar, regularStar, faStarHalfAlt);
