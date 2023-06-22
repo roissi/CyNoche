@@ -24,12 +24,8 @@ CREATE TABLE "movies" (
 -- Seeding
 
 INSERT INTO "movies" (date, name, director, year, letterboxd_url, rating) VALUES
-(now(),'Parasite','Bong Joon-ho','2019','https://boxd.it/hTha','4'),
-(now(),'Sound of metal','Darius Marder','2019','https://boxd.it/i7Q4','3.5'),
-(now(),'Nobody','Ilya Naishuller','2021','https://boxd.it/mLqS','2.5'),
-(now(),'Joker','Todd Phillips','2019','https://boxd.it/h4cS','5'),
-(now(),'À couteaux tirés','Rian Johnson','2019','https://boxd.it/jWEA','3'),
-(now(),'Promising young woman','Emerald Fennell','2020','https://boxd.it/loRE','3.5'),
-(now(),'Désigné coupable','Kevin Macdonald','2021','https://boxd.it/nWiM','2.5');
+(now(),'movie title','director name','year','https://xxxxx','5'),
+(now(),'movie title','director name','year','https://xxxxx','5');
+-- (...)
 
 COMMIT;
