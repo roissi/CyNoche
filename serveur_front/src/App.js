@@ -74,7 +74,7 @@ const Home = () => {
           <Image src={logo} alt="CyNoche Logo" width="1200px" height="300px"  objectFit="contain" />
         </Heading>
         <VStack spacing={3}>
-          <Flex direction="row" wrap="wrap" justifyContent="center" alignItems="center" mb={5}>
+          <Flex direction="row" wrap="wrap" justifyContent="center" alignItems="center" mb={5} px={50}>
             {movies.map((movie) => (
               <Box key={movie.id} m={2}> 
                 <Image src={movie.posterUrl} width="80px" boxShadow="dark-lg" />
