@@ -1,2 +1,2 @@
-web: npm run start --prefix serveur_front
-api: npm run start --prefix serveur_back
+web: npm start --prefix serveur_front
+api: npm start --prefix serveur_back
