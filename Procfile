@@ -1,2 +1,2 @@
-web: npm start --prefix serveur_front
-api: npm start --prefix serveur_back
+web: cd serveur_front && npm i && npm start
+api: cd serveur_back && npm i && npm start

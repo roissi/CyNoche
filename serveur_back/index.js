@@ -7,11 +7,10 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 
-// Import PostgreSQL client from 'pg' package
-import client from './dbClient.js';
-
-// Initialize Express application
 const app = express();
+
+// Import PostgreSQL client from 'pg' package
+import client from './app/service/dbClient.js';
 
 // Allow cross-origin requests from specified origin
 app.use(cors({ origin: 'http://localhost:3000' }));
@@ -41,9 +40,6 @@ app.use((error, req, res, next) => {
 // Function to start the server
 async function startServer() {
   try {
-    // Connect to the PostgreSQL database
-    await client.connect();
-    
     // Set the port for the server
     const PORT = process.env.PORT || 4500;
 
@@ -53,11 +49,28 @@ async function startServer() {
     });
   } catch (error) {
     console.log(error);
-  } finally {
-    // Disconnect from the PostgreSQL database
-    client.end();
   }
 }
+
+// This event listener will be called when the process is about to exit
+process.on('exit', (code) => {
+  console.log(`About to exit with code: ${code}`);
+  client.end();
+});
+
+// This event listener will be called when an uncaught exception occurs in the application
+process.on('uncaughtException', (err) => {
+  console.error(`Uncaught exception: ${err}`);
+  client.end();
+  process.exit(1);
+});
+
+// This event listener will be called when an unhandled promise rejection occurs in the application
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  client.end();
+  process.exit(1);
+});
 
 // Call function to start the server
 startServer();

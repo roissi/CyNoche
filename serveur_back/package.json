@@ -3,11 +3,11 @@
   "name": "cynoche",
   "private": true,
   "version": "0.0.0",
-  "engines": { "node": "v18.12.1" }
+  "engines": { "node": "v18.12.1" },
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "postinstall": "node updateTmdblds.js"
+    "tmdbinstall": "node updateTmdblds.js"
   },
   "devDependencies": {
     "vite": "^4.0.0"
