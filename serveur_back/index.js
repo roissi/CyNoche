@@ -8,14 +8,10 @@ import bodyParser from "body-parser";
 import cors from "cors";
 
 // Import PostgreSQL client from 'pg' package
-import pg from 'pg';
-const { Client } = pg;
+import client from './dbClient.js';
 
 // Initialize Express application
 const app = express();
-
-// Initialize PostgreSQL client
-const client = new Client();
 
 // Allow cross-origin requests from specified origin
 app.use(cors({ origin: 'http://localhost:3000' }));
