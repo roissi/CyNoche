@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Box, Button, Flex, Stack, VStack, Heading, Image, Input, Text, List, Spinner } from '@chakra-ui/react';
-import axios from 'axios';
 import darkLogo from '../assets/img/CyNoche-transparent.png';
 import lightLogo from '../assets/img/CyNoche-transparent_light.png';
 import ColorModeToggle from './ColorModeToggle';
@@ -9,19 +9,16 @@ import MovieListItem from './MovieListItem';
 import AddModal from './ModalAddMovie';
 import SortButtons from './SortButtons';
 import { useMovies } from '../contexts/MovieContext';
+import { fetchMovies, sortMovies } from '../contexts/MovieUtils';  // Importez les nouvelles fonctions ici
 
-// Constant for number of movies displayed per page
 const MOVIES_PER_PAGE = 50;
-  
+
 const MoviesPage = () => {
-  // Use color mode value from Chakra UI for color theming
   const bgColor = useColorModeValue("#e4fff7", "gray.800");
   const color = useColorModeValue("black", "white");
   const logo = useColorModeValue(lightLogo, darkLogo);
-  // Use movie context
   const { allMovies, setAllMovies, currentPage, setCurrentPage, searchQuery, setSearchQuery, sort, setSort } = useMovies();
 
-  // State for currently displayed movies, movie count, search and error states
   const [displayedMovies, setDisplayedMovies] = useState([]);
   const [movieCount, setMovieCount] = useState(0);
   const [searchPerformed, setSearchPerformed] = useState(false);
@@ -30,16 +27,14 @@ const MoviesPage = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Counter logic for movie count animation
   const [counter, setCounter] = useState(0);
-  const animationTime = 100; // in milliseconds
+  const animationTime = 100;
 
-  // Animation for the movie count
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCounter((prevCounter) => {
         if (prevCounter < movieCount) {
-          return prevCounter + 3;
+          return prevCounter + 1;
         }
 
         clearInterval(intervalId);
@@ -50,63 +45,18 @@ const MoviesPage = () => {
 
     return () => clearInterval(intervalId);
   }, [movieCount]);
-  
-  // Fetch movies from the backend
-  const fetchMovies = (endpoint) => {
-    axios.get(endpoint)
-      .then(res => {
-        setAllMovies(res.data.movies);
-        setMovieCount(res.data.count);
-        setError(null); // Reset error on successful request
-      })
-      .catch(err => {
-        console.error(err);
-        setError(err.message);
-      })
-      .finally(() => {
-        setIsLoading(false); // Set loading state to false after the request is completed
-      });
-  };
 
-  // Function to sort movies
-  function sortMovies(movies, sort) {
-    if (!movies) {
-      return [];
-    }
-    const sortedMovies = [...movies];
-    switch (sort) {
-    case 'name_asc':
-      sortedMovies.sort((a, b) => a.name.localeCompare(b.name));
-      break;
-    case 'name_desc':
-      sortedMovies.sort((a, b) => b.name.localeCompare(a.name));
-      break;
-    case 'year_asc':
-      sortedMovies.sort((a, b) => a.year - b.year);
-      break;
-    case 'year_desc':
-      sortedMovies.sort((a, b) => b.year - a.year);
-      break;
-    case 'director_asc':
-      sortedMovies.sort((a, b) => a.director.localeCompare(b.director));
-      break;
-    case 'director_desc':
-      sortedMovies.sort((a, b) => b.director.localeCompare(a.director));
-      break;
-    case 'rating_asc':
-      sortedMovies.sort((a, b) => a.rating - b.rating);
-      break;
-    case 'rating_desc':
-      sortedMovies.sort((a, b) => b.rating - a.rating);
-      break;
-    default:
-      throw new Error(`Invalid sort option: ${sort}`);
-    }
-    
-    return sortedMovies;
-  }
- 
-  // Update displayedMovies when allMovies, sort, or currentPage changes
+  useEffect(() => {
+    const endpoint = `${process.env.REACT_APP_API_BASE_URL}/movies`;
+    fetchMovies(endpoint)
+      .then(res => {
+        setAllMovies(res.movies);
+        setMovieCount(res.count);
+        setError(res.error);
+        setIsLoading(false);
+      });
+  }, []);
+
   useEffect(() => {
     const sortedMovies = sortMovies(allMovies, sort);
     const start = (currentPage - 1) * MOVIES_PER_PAGE;
@@ -114,37 +64,39 @@ const MoviesPage = () => {
     setDisplayedMovies(sortedMovies.slice(start, end));
   }, [allMovies, sort, currentPage]);
 
-  // Load all movies without sorting when the component mounts
-  useEffect(() => {
-    const endpoint = `http://localhost:4500/movies`;
-    fetchMovies(endpoint);
-  }, []);
-  
-  // Search movies using fetchMovies0
   const searchMovies = () => {
-    const endpoint = `http://localhost:4500/movies/search?query=${encodeURIComponent(searchQuery)}`;
-    
-    // If no search has been done previously, save the current state of the movies and the page
+    const endpoint = `${process.env.REACT_APP_API_BASE_URL}/movies/search?query=${encodeURIComponent(searchQuery)}`;
+
     if (!searchPerformed) {
       setMoviesBeforeSearch(allMovies);
       setPageBeforeSearch(currentPage);
     }
   
-    fetchMovies(endpoint);
+    fetchMovies(endpoint)
+      .then(res => {
+        setAllMovies(res.movies);
+        setMovieCount(res.count);
+        setError(res.error);
+        setIsLoading(false);
+      });
     setSearchPerformed(true);
   };
 
   // JSX returned by the component
   return (
-    <Flex direction="column" bgColor={bgColor} color={color} w="100%" minH="100vh" pl={100} pr={100} justifyContent="space-between">
+    <Flex direction="column" bgColor={bgColor} color={color} w="100%" minH="100vh" pl={{ base: "4", md: "100" }} pr={{ base: "4", md: "100" }} justifyContent="space-between">
       <Flex position="absolute" top={5} right={5}>
         <ColorModeToggle />
       </Flex>
-      <VStack spacing={3} w="100%" alignItems="center">
+      <VStack spacing={3} w="100%" alignItems="center" mt={['-6', '20']}>
         <Heading>
-          <Image src={logo} alt="CyNoche Logo" width="600px" height="300px"  objectFit="contain" />
+          <Link to="/">
+            <Image src={logo} alt="CyNoche Logo" width={{ base: "300px", md: "600px" }} height="300px"  objectFit="contain" />
+          </Link>
         </Heading>
-        <SortButtons setSort={setSort} />
+        <Box display={{ base: 'none', sm: 'flex' }}>
+          <SortButtons setSort={setSort} />
+        </Box>
 
         <Box mb={5}>
           <Heading as="h2" mb="3">{searchPerformed ? "Search again ?" : "Come on, search..."}</Heading>
@@ -162,7 +114,7 @@ const MoviesPage = () => {
                   value={searchQuery} 
                   onChange={e => setSearchQuery(e.target.value)} 
                   borderColor="gray.400"
-                  w="250px" 
+                  w={{ base: "200px", md: "250px" }}
                 />
                 <Button colorScheme='teal' size='md' ml="4" type='submit'>Search</Button>
                 {searchPerformed && (
@@ -178,7 +130,7 @@ const MoviesPage = () => {
         </Box>
         <Box height="30px" />
 
-        <Flex direction="row" justify="center" align="flex-start" w="100%">
+        <Flex direction={{ base: "column", md: "row" }} justify="center" align="flex-start" w="100%">
           <Box>
             <Heading as="h2" mb={10}>
               <Text as="span" color="goldenrod">{counter}</Text>
@@ -201,7 +153,8 @@ const MoviesPage = () => {
                         <MovieListItem key={movie.id} movie={movie} />
                       ))
                     ) : (
-                      <Text color="goldenrod" fontStyle="italic">So sorry... No movie found. Did you spell the title of the   film or the name of the director correctly?</Text>)}
+                      <Text color="goldenrod" fontStyle="italic">So sorry... No movie found. Did you spell the title of the film or the name of the director correctly?</Text>
+                    )}
                   </List>
                 </>
               )}
@@ -209,7 +162,7 @@ const MoviesPage = () => {
           </Box>
 
           {!searchPerformed && (
-            <Box ml={5}>
+            <Box ml={{ base: 0, md: 5 }} mt={{ base: 5, md: 0 }}>
               <AddModal />
             </Box>
           )}

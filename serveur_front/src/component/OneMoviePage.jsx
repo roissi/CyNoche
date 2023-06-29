@@ -11,11 +11,38 @@ import { useNavigate } from 'react-router-dom';
 import { fetchMovieFromDatabase, fetchMovieDetailsFromTMDB } from '../contexts/MovieService';
 import StarRating from './StarRating';
 
-// The OneMoviePage component displays details of a single movie
+const fetchData = async (id, setMovie, setMovieDetails, setError, setIsLoading) => {
+  setIsLoading(true);
+  try {
+    const movie = await fetchMovieFromDatabase(id);
+    const movieData = await fetchMovieDetailsFromTMDB(id);
+    setMovie(movie);
+    setMovieDetails(movieData);
+    setError(null);
+  } catch (error) {
+    console.error('Error fetching movie details:', error);
+    setError(error.message);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+const handleMovieUpdate = (setMovie) => (updatedMovie) => {
+  setMovie(updatedMovie);
+};
+
+const handleMovieDelete = (navigate) => () => {
+  navigate("/movies");
+};
+
+const toggleLanguage = (setLanguage) => () => {
+  setLanguage((prevLang) => prevLang === 'en' ? 'fr' : 'en');
+};
+
 const OneMoviePage = () => {
-  // Use useParams to get the movie id from the route parameters
+  // Utilisez useParams pour obtenir l'id du film à partir des paramètres de la route
   const { id } = useParams();
-  // State variables for movie, movieDetails, language, error and isLoading
+  // Variables d'état pour movie, movieDetails, language, error et isLoading
   const [movie, setMovie] = useState(null);
   const bgColor = useColorModeValue("#e4fff7", "gray.800");
   const color = useColorModeValue("black", "white");
@@ -24,48 +51,20 @@ const OneMoviePage = () => {
   const [language, setLanguage] = useState('en');
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-
-  // Function to handle updating of movie data after edit
-  const handleMovieUpdate = (updatedMovie) => {
-    setMovie(updatedMovie);
-  };
-
-  // Function to handle deletion of movie
   const navigate = useNavigate();
-  const handleMovieDelete = () => {
-    navigate("/movies");
-  };
-  
-  // Function to toggle language between 'en' and 'fr'
-  const toggleLanguage = () => {
-    setLanguage((prevLang) => prevLang === 'en' ? 'fr' : 'en');
-  };
+  const onUpdate = handleMovieUpdate(setMovie);
+  const onDelete = handleMovieDelete(navigate);
+  const onToggleLanguage = toggleLanguage(setLanguage);
+
 
   // UseEffect to fetch the movie and its details when the component mounts or id changes
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const movie = await fetchMovieFromDatabase(id);
-        const movieData = await fetchMovieDetailsFromTMDB(id);
-        setMovie(movie);
-        setMovieDetails(movieData);
-        setError(null);
-      } catch (error) {
-        console.error('Error fetching movie details:', error);
-        setError(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
+    fetchData(id, setMovie, setMovieDetails, setError, setIsLoading);
   }, [id]);
 
   // Display loading spinner while fetching data
   if (isLoading) {
     return (
-      // JSX for loading state
       <Flex justify="center" align="center" minH="100vh">
         <Spinner
           thickness='4px'
@@ -89,7 +88,7 @@ const OneMoviePage = () => {
   // Display movie details
   return (
     // JSX for displaying movie details
-    <Flex direction="column" bgColor={bgColor} color={color} w="100%" minH="100vh" justifyContent="center" alignItems="center" position="relative">
+    <Flex direction="column" bgColor={bgColor} color={color} w="100%" minH="100vh" justifyContent="center" alignItems="center" position="relative" py={{ base: "5", md: "0" }}>
       <Flex position="absolute" top={5} right={5}>
         <ColorModeToggle />
       </Flex>
@@ -116,7 +115,7 @@ const OneMoviePage = () => {
             />
           </Box>
         }
-        <Box maxWidth="80ch" margin="auto">
+        <Box maxWidth="80ch" margin="auto" paddingX={{ base: '4', md: '0' }}>
           <Flex justify="space-between" align="center">
             <Text fontSize="lg" fontStyle="italic">
               {movie ? (language === 'en' ? movie.overview_en : movie.overview_fr) : 'No overview available'}
@@ -124,24 +123,31 @@ const OneMoviePage = () => {
           </Flex>
         </Box>
         <Box textAlign="center">
-          <Button 
-            variant='outline' 
-            colorScheme='teal' 
-            onClick={toggleLanguage} 
-            leftIcon={<FaBook />} // Position the icon on the left
-            mr={5} // To add some space to the right
-          >
-            {language === 'en' ? 'FR' : 'UK'} 
-          </Button>
-          <EditModal
-            movie={movie}
-            onUpdate={handleMovieUpdate}
-          />
-          <DeleteMovie
-            ml={5}
-            movie={movie}
-            onDelete={handleMovieDelete}
-          />
+          <Flex direction={['column', 'row']} justify="center" alignItems="center" mb={4} wrap="wrap">
+            <Flex direction="row" justify="center" alignItems="center" mb={[4, 0]}>
+              <Button 
+                variant='outline' 
+                colorScheme='teal' 
+                onClick={onToggleLanguage} 
+                leftIcon={<FaBook />}
+                mr={4}
+              >
+                {language === 'en' ? 'FR' : 'UK'} 
+              </Button>
+            </Flex>
+            <Flex direction="row" justify="center" alignItems="center">
+              <EditModal
+                movie={movie}
+                onUpdate={onUpdate}
+                mr={8}
+              />
+              <DeleteMovie
+                ml={4}
+                movie={movie}
+                onDelete={onDelete}
+              />
+            </Flex>
+          </Flex>
         </Box>
         <Button as={Link} to="/movies" colorScheme='teal' size='md'>Back to all movies</Button>
       </VStack>

@@ -70,7 +70,7 @@ For the application to function correctly on your machine, you will need to set 
 ### For the Frontend :
 1. In `serveur_front`, directory, copy the `.env.example` file and rename this copy to `.env`.
 
-2. Open the new `.env` file and add your own TMDB API key as the value of `REACT_APP_TMDB_API_KEY` avec votre propre clé API TMDB. You can obtain a TMDB API key by creating an account on the [TMDB website](https://www.themoviedb.org/).
+2. Open the new `.env` file and add your own TMDB API key as the value of `REACT_APP_TMDB_API_KEY`. You can obtain a TMDB API key by creating an account on the [TMDB website](https://www.themoviedb.org/).
 
 ### For the Backend (API) :
 
