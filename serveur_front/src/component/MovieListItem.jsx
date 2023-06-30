@@ -13,17 +13,19 @@ const MovieListItem = ({ movie }) => {
   const hoverColor = useColorModeValue('black', 'white');
 
   return (
-    <ListItem>
-      <Flex align="center">
-        <ChakraLink as={RouterLink} to={`/movies/${movie.id}`} color={titleColor} _hover={{ color: hoverColor }} fontStyle="italic" fontWeight="bold">
+    <ListItem mb={{ base: '8', md: '0' }}>
+      <Flex direction={{ base: 'column', md: 'row' }} align={{ base: 'center', md: 'flex-start' }}>
+        <ChakraLink as={RouterLink} to={`/movies/${movie.id}`} color={titleColor} _hover={{ color: hoverColor }} fontStyle="italic" fontWeight="bold" fontSize="lg" textAlign={{ base: "center", md: "left" }}>
           {movie.name}
         </ChakraLink>
-        <Text as="span" mx={2}>-</Text>
-        {movie.director} ({movie.year})
+        <Text as="span" mx={2} display={{ base: 'none', md: 'inline' }}>-</Text>
+        <Text fontSize={{ base: "md", md: "lg" }} display={{ base: 'block', md: 'inline' }} textAlign={{ base: "center", md: "left" }}>
+          {movie.director} ({movie.year})
+        </Text>
         <Box ml="4" mr="3">
           <StarRating rating={movie.rating} size="1x" />
         </Box>
-        <ChakraLink href={movie.letterboxd_url} isExternal ml="2">
+        <ChakraLink href={movie.letterboxd_url} isExternal ml="2" display={{ base: 'none', md: 'block' }}>
           <Image src={letterboxdLogo} alt="Letterboxd Info" boxSize="24px" />
         </ChakraLink>
       </Flex>

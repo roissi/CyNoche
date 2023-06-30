@@ -9,11 +9,14 @@ import MovieListItem from './MovieListItem';
 import AddModal from './ModalAddMovie';
 import SortButtons from './SortButtons';
 import { useMovies } from '../contexts/MovieContext';
-import { fetchMovies, sortMovies } from '../contexts/MovieUtils';  // Importez les nouvelles fonctions ici
-
-const MOVIES_PER_PAGE = 50;
+import { fetchMovies, sortMovies } from '../contexts/MovieUtils';
+import { useMediaQuery } from '@chakra-ui/react';
 
 const MoviesPage = () => {
+
+  const [isSmallerScreen] = useMediaQuery("(max-width: 600px)");
+  const MOVIES_PER_PAGE = isSmallerScreen ? 20 : 50;
+
   const bgColor = useColorModeValue("#e4fff7", "gray.800");
   const color = useColorModeValue("black", "white");
   const logo = useColorModeValue(lightLogo, darkLogo);
@@ -130,8 +133,8 @@ const MoviesPage = () => {
         </Box>
         <Box height="30px" />
 
-        <Flex direction={{ base: "column", md: "row" }} justify="center" align="flex-start" w="100%">
-          <Box>
+        <Flex direction={{ base: "column", md: "row" }} justify="center"alignItems={{ base: "center", md: "flex-start" }} align="flex-start" w="100%">
+          <Box maxW={{ base: "full", md: "4xl" }}>
             <Heading as="h2" mb={10}>
               <Text as="span" color="goldenrod">{counter}</Text>
               <Text as="span"> movies</Text>
@@ -162,9 +165,9 @@ const MoviesPage = () => {
           </Box>
 
           {!searchPerformed && (
-            <Box ml={{ base: 0, md: 5 }} mt={{ base: 5, md: 0 }}>
+            <Flex ml={{ base: 0, md: 5 }} mt={{ base: 5, md: 0 }} justifyContent={{base: 'center', md: 'flex-start'}} w={{ base: "full", md: "auto" }}>
               <AddModal />
-            </Box>
+            </Flex>
           )}
         </Flex>
         <Box display="flex" flexDirection="column" alignItems="center" w="100%">
