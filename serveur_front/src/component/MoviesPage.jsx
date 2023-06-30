@@ -91,7 +91,7 @@ const MoviesPage = () => {
       <Flex position="absolute" top={5} right={5}>
         <ColorModeToggle />
       </Flex>
-      <VStack spacing={3} w="100%" alignItems="center" mt={['-6', '20']}>
+      <VStack spacing={{ base: 0, md: 3 }} w="100%" alignItems="center" mt={['-4', '20']}>
         <Heading>
           <Link to="/">
             <Image src={logo} alt="CyNoche Logo" width={{ base: "300px", md: "600px" }} height="300px"  objectFit="contain" />
@@ -110,32 +110,35 @@ const MoviesPage = () => {
             setSearchPerformed(true);
           }}>
             <Flex direction="column" alignItems="center" justify="center">
-              <Flex direction="row" justify="center" align="center">
+              <Flex direction={{ base: 'column', md: 'row' }} justify="center" align="center">
                 <Input 
                   type="text" 
                   placeholder="Movie title or Director name" 
                   value={searchQuery} 
                   onChange={e => setSearchQuery(e.target.value)} 
                   borderColor="gray.400"
-                  w={{ base: "200px", md: "250px" }}
+                  w="250px"
+                  mb={{ base: '4', md: '0' }}
                 />
-                <Button colorScheme='teal' size='md' ml="4" type='submit'>Search</Button>
-                {searchPerformed && (
-                  <Button colorScheme='teal' size='md' ml="4" onClick={() => {
-                    setAllMovies(moviesBeforeSearch);
-                    setCurrentPage(pageBeforeSearch); // Restoring the page before the search
-                    setSearchPerformed(false);
-                  }}>Back to list</Button>
-                )}
+                <Flex direction={{ base: searchPerformed ? 'row' : 'column', md: 'row' }} ml={{ base: '0', md: '4' }} align="center" justify="space-between" width={{ base: 'full', md: 'auto' }} h="full">
+                  <Button colorScheme='teal' size='md' ml={{ base: '0', md: '4' }} type='submit'>Search</Button>
+                  {searchPerformed && (
+                    <Button colorScheme='teal' size='md' ml={{ base: '0', md: '4' }} onClick={() => {
+                      setAllMovies(moviesBeforeSearch);
+                      setCurrentPage(pageBeforeSearch); // Restoring the page before the search
+                      setSearchPerformed(false);
+                    }}>Back to list</Button>
+                  )}
+                </Flex>
               </Flex>
             </Flex>
           </form>
         </Box>
         <Box height="30px" />
 
-        <Flex direction={{ base: "column", md: "row" }} justify="center"alignItems={{ base: "center", md: "flex-start" }} align="flex-start" w="100%">
+        <Flex direction={{ base: "column", md: "row" }} justify="center" alignItems={{ base: "center", md: "flex-start" }} align="flex-start" w="100%">
           <Box maxW={{ base: "full", md: "4xl" }}>
-            <Heading as="h2" mb={10}>
+            <Heading as="h2" mb={10} textAlign={{ base: 'center', md: 'left' }}>
               <Text as="span" color="goldenrod">{counter}</Text>
               <Text as="span"> movies</Text>
             </Heading>

@@ -1920,6 +1920,9 @@ INSERT INTO "movies" (date, name, director, year, letterboxd_url, rating) VALUES
 (now(),'How to save a dead friend','Marusya Syroechkovskaya','2022','https://boxd.it/zTkk','4'),
 (now(),'Daniel','Sidney Lumet','1983','https://boxd.it/qVm','4'),
 (now(),'Mistral spatial','Marc-Antoine Lemire','2022','https://boxd.it/CXno','3.5'),
-(now(),'Indiana Jones et le cadran de la destinée','James Mangold','2023','https://boxd.it/b8vM','4');
+(now(),'Indiana Jones et le cadran de la destinée','James Mangold','2023','https://boxd.it/b8vM','4'),
+(now(),'La reine de la magie noire','Kimo Stamboel','2019','https://boxd.it/lKHm','3'),
+(now(),'Ashkal, l''enquête de Tunis','Youssef Chebbi','2022','https://boxd.it/Aqoa','3'),
+(now(),'Il boemo','Petr Václav','2022','https://boxd.it/oVZs','4.5');
 
 COMMIT;
