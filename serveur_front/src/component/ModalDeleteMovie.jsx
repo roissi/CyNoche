@@ -9,10 +9,24 @@ function ModalDeleteMovie({ movie, onDelete, ...props }) {
   const handleDelete = async () => {
     try {
       // Send a DELETE request to the server for the movie with the given ID
-      const response = await axios.post(`http://localhost:4500/movies/delete/${movie.id}`);
+      const response = await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/movies/${movie.id}`);
       // Handle response based on status
       if (response.status === 200) {
         console.log(response.data.message);
+
+        // Log the action
+        await axios.post(`${process.env.REACT_APP_API_BASE_URL}/log`, {
+          action: 'delete',
+          movie: {
+            name: movie.name,
+            director: movie.director,
+            year: movie.year,
+            rating: movie.rating,
+            letterboxd_url: movie.letterboxd_url,
+          },
+          timestamp: new Date(),
+        });
+
         // If the movie was deleted successfully, call the onDelete function (passed in as a prop) and close the modal
         onDelete();
         onClose();
