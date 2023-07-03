@@ -1,19 +1,21 @@
-import axios from 'axios';
+import logger from '../service/logger.js';
 
 const logController = {
-
-logAction: async (req, res, next) => {
+  logAction: async (req, res, next) => {
     const { action, message } = req.body;
 
     try {
-      // Post the action to the logging server
-      await axios.post('/log', { action, message });
+      // Log the action and message
+      logger.info({ action, message });
 
       res.status(200).send({ message: 'Action logged successfully.' });
     } catch (error) {
+      // Log the error information
+      logger.error({ message: error.message, stack: error.stack });
+
       next(error);
     }
   },
 };
 
-  export default logController;
+export default logController;

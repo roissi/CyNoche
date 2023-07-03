@@ -157,7 +157,7 @@ const movieController = {
         year,
         rating,
         letterboxd_url,
-        tmdb_id, // Update the TMDB ID in your movie data
+        tmdb_id,
         overview_en,
         overview_fr
       };
@@ -171,7 +171,7 @@ const movieController = {
         return;
       }
   
-      logger.info(`Movie with ID: ${movieId} was successfully updated.`);
+      logger.info(`Movie with ID: ${movieId} was successfully updated.`, movie);
       res.json({ message: 'Film mis à jour avec succès', movie });
     } catch (error) {
       logger.error('An error occurred while updating a movie.', error);

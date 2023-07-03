@@ -21,7 +21,7 @@ router.delete("/movies/delete/:id", movieController.deleteMovie);
 // Define a route to create a new movie
 router.post("/movies", movieController.createMovie);
 // Define a route to update an existing movie by its ID
-router.post("/movies/update/:id", movieController.updateMovie);
+router.patch("/movies/update/:id", movieController.updateMovie);
 
 // Define a route to log an action
 router.post("/log", logController.logAction);
