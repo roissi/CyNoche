@@ -1,43 +1,17 @@
 // Import the necessary elements from Chakra UI and axios for making HTTP requests
 import { Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure } from "@chakra-ui/react"
-import axios from 'axios';
 
 function ModalDeleteMovie({ movie, onDelete, ...props }) {
   // Use the useDisclosure hook from Chakra UI to control the opening and closing of the modal
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const handleDelete = async () => {
-    try {
-      // Send a DELETE request to the server for the movie with the given ID
-      const response = await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/movies/${movie.id}`);
-      // Handle response based on status
-      if (response.status === 200) {
-        console.log(response.data.message);
+    
+    // If the movie was deleted successfully, call the onDelete function (passed in as a prop) and close the modal
+    await onDelete();
 
-        // Log the action
-        await axios.post(`${process.env.REACT_APP_API_BASE_URL}/log`, {
-          action: 'delete',
-          movie: {
-            name: movie.name,
-            director: movie.director,
-            year: movie.year,
-            rating: movie.rating,
-            letterboxd_url: movie.letterboxd_url,
-          },
-          timestamp: new Date(),
-        });
-
-        // If the movie was deleted successfully, call the onDelete function (passed in as a prop) and close the modal
-        onDelete();
-        onClose();
-      } else if (response.status === 404) {
-        // If the movie wasn't found (status 404), log the error message to the console
-        console.log(response.data.message);
-      }
-    } catch (error) {
-      // Log any errors to the console
-      console.error(error);
-    }
+    // Close the modal
+    onClose();
   }
 
   return (
