@@ -23,9 +23,7 @@ function MyModal({ movie, onUpdate }) {
     setUrl(movie.letterboxd_url);
   }, [movie]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const handleSubmit = async () => {
     // Create a new object with the updated movie details
     const movieUpdate = {
       name,
@@ -37,7 +35,7 @@ function MyModal({ movie, onUpdate }) {
 
     try {
       // Send a POST request to the update endpoint with the movie's id and the updated details
-      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/movies`, movieUpdate);
+      const response = await axios.patch(`${process.env.REACT_APP_API_BASE_URL}/movies/update/${movie.id}`, movieUpdate);
       console.log(response.data);
       // Call the onUpdate callback with the updated movie details and close the modal
       onUpdate(movieUpdate);
@@ -55,9 +53,12 @@ function MyModal({ movie, onUpdate }) {
         timestamp: new Date(),
       });
       
-      onClose();
     } catch (error) {
+      // Log any errors to the console
       console.error(error);
+    } finally {
+      // Close the modal after the movie has been added or an error occurred
+      onClose();
     }
   }
 
@@ -71,7 +72,7 @@ function MyModal({ movie, onUpdate }) {
           <ModalHeader>Update this movie</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <form onSubmit={handleSubmit}>
+            <form>
               {/* Form controls for the movie details with validation */}
               <FormControl isRequired>
                 <FormLabel>Title</FormLabel>

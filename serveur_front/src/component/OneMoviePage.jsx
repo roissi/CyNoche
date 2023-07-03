@@ -10,6 +10,7 @@ import DeleteMovie from './ModalDeleteMovie';
 import { useNavigate } from 'react-router-dom';
 import { fetchMovieFromDatabase, fetchMovieDetailsFromTMDB } from '../contexts/MovieService';
 import StarRating from './StarRating';
+import axios from 'axios';
 
 const fetchData = async (id, setMovie, setMovieDetails, setError, setIsLoading) => {
   setIsLoading(true);
@@ -31,10 +32,6 @@ const handleMovieUpdate = (setMovie) => (updatedMovie) => {
   setMovie(updatedMovie);
 };
 
-const handleMovieDelete = (navigate) => () => {
-  navigate("/movies");
-};
-
 const toggleLanguage = (setLanguage) => () => {
   setLanguage((prevLang) => prevLang === 'en' ? 'fr' : 'en');
 };
@@ -53,14 +50,41 @@ const OneMoviePage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const onUpdate = handleMovieUpdate(setMovie);
-  const onDelete = handleMovieDelete(navigate);
   const onToggleLanguage = toggleLanguage(setLanguage);
+  const [deleted, setDeleted] = useState(false);
 
+  const handleMovieDelete = (navigate, movie) => async () => {
+    try {
+      const response = await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/movies/delete/${movie.id}`);
+      console.log('Delete response:', response); // Ajoutez ceci
+      const logResponse = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/log`, {
+        action: 'delete',
+        movie: {
+          name: movie.name,
+          director: movie.director,
+          year: movie.year,
+          rating: movie.rating,
+          letterboxd_url: movie.letterboxd_url,
+        },
+        timestamp: new Date(),
+      });
+      console.log('Log response:', logResponse); // Ajoutez ceci
+      setDeleted(true);  // Set deleted state to true after successful delete
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   // UseEffect to fetch the movie and its details when the component mounts or id changes
   useEffect(() => {
     fetchData(id, setMovie, setMovieDetails, setError, setIsLoading);
   }, [id]);
+
+  useEffect(() => {
+    if (deleted) {
+      navigate("/movies");
+    }
+  }, [deleted, navigate]);
 
   // Display loading spinner while fetching data
   if (isLoading) {
@@ -144,7 +168,7 @@ const OneMoviePage = () => {
               <DeleteMovie
                 ml={4}
                 movie={movie}
-                onDelete={onDelete}
+                onDelete={handleMovieDelete(navigate, movie)}
               />
             </Flex>
           </Flex>

@@ -14,9 +14,9 @@ function MyModal() {
   const [letterboxd_url, setUrl] = useState('');
 
   // Function to handle the submission of the form
-  const handleSubmit = async (e) => {
+  const handleSubmit = async () => {
     // Prevent the default form submission behavior
-    e.preventDefault();
+    console.log('handleSubmit triggered');
 
     // Create a new movie object with the current state values and the current date
     const movieAdd = {
@@ -40,11 +40,12 @@ function MyModal() {
         timestamp: new Date(),
       });
       
-      // Close the modal after the movie has been added
-      onClose();
     } catch (error) {
       // Log any errors to the console
       console.error(error);
+    } finally {
+      // Close the modal after the movie has been added or an error occurred
+      onClose();
     }
   }
 
@@ -58,9 +59,8 @@ function MyModal() {
           <ModalHeader>Add a new movie</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <form onSubmit={handleSubmit}>
+            <form>
               {/* Form controls for each of the movie details. The value prop is tied to the state variables and the onChange prop updates the state variables as the user types */}
-              <FormControl isRequired></FormControl>
               <FormControl isRequired>
                 <FormLabel>Title</FormLabel>
                 <Input placeholder="Title" value={name} onChange={(e) => setName(e.target.value)} />
