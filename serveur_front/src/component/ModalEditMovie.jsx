@@ -37,10 +37,24 @@ function MyModal({ movie, onUpdate }) {
 
     try {
       // Send a POST request to the update endpoint with the movie's id and the updated details
-      const response = await axios.post(`http://localhost:4500/movies/update/${movie.id}`, movieUpdate);
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/movies`, movieUpdate);
       console.log(response.data);
       // Call the onUpdate callback with the updated movie details and close the modal
       onUpdate(movieUpdate);
+
+      // Log the action
+      await axios.post(`${process.env.REACT_APP_API_BASE_URL}/log`, {
+        action: 'update',
+        movie: {
+          name,
+          director,
+          year,
+          rating,
+          letterboxd_url,
+        },
+        timestamp: new Date(),
+      });
+      
       onClose();
     } catch (error) {
       console.error(error);

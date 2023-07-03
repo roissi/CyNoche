@@ -1,6 +1,7 @@
 // Import the necessary packages and modules
 import dataMapper from "../model/dataMapper.js";
 import axios from 'axios';
+import logger from "../service/logger.js";
 
 const movieController = {
   // Route handler to get all movies
@@ -78,12 +79,15 @@ const movieController = {
 
       // If no movie was deleted, send a message to the user
       if (deletedRowCount === 0) {
+        logger.error(`Failed to delete movie with ID: ${movieId}`);
         res.status(404).json({ message: "Film introuvable" });
         return;
       }
 
+      logger.info(`Movie with ID: ${movieId} was successfully deleted.`);
       res.json({ message: `Film supprimé avec l'ID: ${movieId}` });
     } catch (error) {
+      logger.error('An error occurred while deleting a movie.', error);
       next(error);
     }
   },
@@ -119,12 +123,15 @@ const movieController = {
 
       // If the movie is not created, send a message to the user
       if (!movie) {
+        logger.error('Failed to create movie.', movieAdd);
         res.status(404).json({ message: "Impossible de créer le film" });
         return;
       }
-
+  
+      logger.info('A new movie was created.', movie);
       res.json({ message: 'Film créé avec succès', movie });
     } catch (error) {
+      logger.error('An error occurred while creating a new movie.', error);
       next(error);
     }
   },
@@ -150,7 +157,7 @@ const movieController = {
         year,
         rating,
         letterboxd_url,
-        tmdb_id, // Update the TMDB ID in your movie data
+        tmdb_id,
         overview_en,
         overview_fr
       };
@@ -159,12 +166,15 @@ const movieController = {
 
       // If the movie is not found, send a message to the user
       if (!movie) {
+        logger.error(`Failed to update movie with ID: ${movieId}`);
         res.status(404).json({ message: "Film introuvable" });
         return;
       }
-
+  
+      logger.info(`Movie with ID: ${movieId} was successfully updated.`, movie);
       res.json({ message: 'Film mis à jour avec succès', movie });
     } catch (error) {
+      logger.error('An error occurred while updating a movie.', error);
       next(error);
     }
   },

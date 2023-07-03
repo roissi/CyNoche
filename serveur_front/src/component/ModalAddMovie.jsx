@@ -30,8 +30,16 @@ function MyModal() {
 
     try {
       // Post the new movie to the server
-      const response = await axios.post('http://localhost:4500/movies', movieAdd);
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/movies`, movieAdd);
       console.log(response.data);
+
+      // Log the action
+      await axios.post(`${process.env.REACT_APP_API_BASE_URL}/log`, {
+        action: 'add',
+        movie: name,
+        timestamp: new Date(),
+      });
+      
       // Close the modal after the movie has been added
       onClose();
     } catch (error) {
