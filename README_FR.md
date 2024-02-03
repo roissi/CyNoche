@@ -13,6 +13,7 @@ CyNoche est construit avec React et Chackra UI. Il utilise une API fournissant l
 - Fiche du film sélectionné (affiche + résumé)
 - Version FR ou UK des fiches de film
 - Dark ou light mode
+
 ***** CRUD Admin privé => merci de me demader le mot de pass *****
 - Ajout d'un film dans la BDD
 - Modification des informations d'un film dans la BDD
