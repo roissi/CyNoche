@@ -9,13 +9,15 @@ CyNoche is built with React and Chakra UI. It uses an API to provide data (movie
 - Display of a movie catalog
 - Star rating system (out of 5)
 - Sorting by movie names, directors' names, release years, and ratings
-- Adding a movie to the database
-- Modifying a movie's information in the database
-- Deleting a movie in the database
 - Searching for movies (titles and/or directors)
 - Selected movie's card (poster + summary)
 - French or English version
 - Dark or light mode
+
+***** CRUD Admin is private => please ask me the password *****
+- Adding a movie to the database
+- Modifying a movie's information in the database
+- Deleting a movie in the database
 
 ## Requirements for local installation
 
