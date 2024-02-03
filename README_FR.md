@@ -9,13 +9,14 @@ CyNoche est construit avec React et Chackra UI. Il utilise une API fournissant l
 - Affichage d'un catalogue de films
 - Système de notation par étoiles (sur 5)
 - Tri par nom des films, noms des réalisateurs, années de sortie et notes
-- Ajout d'un film dans la BDD
-- Modification des informations d'un film dans la BDD
-- Supression d'un film dans la BDD
 - Recherche de films (titres et/ou réalisateurs)
 - Fiche du film sélectionné (affiche + résumé)
 - Version FR ou UK des fiches de film
 - Dark ou light mode
+***** CRUD Admin privé => merci de me demader le mot de pass *****
+- Ajout d'un film dans la BDD
+- Modification des informations d'un film dans la BDD
+- Supression d'un film dans la BDD
 
 ## Prérequis pour l'installation locale
 
